@@ -1,12 +1,13 @@
 name: uni_kit
-description: A new Flutter application.
+description: Emergency Kit for METU students
 
-version: 1.0.0+1
+version: 1.0.9+9
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
+  flutter_local_notifications: ^0.8.4+3
   provider:
   http:
   html:

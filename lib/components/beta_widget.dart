@@ -7,19 +7,18 @@ class BetaWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "v.1.0.6\n",
+          "v.1.0.9\n",
           style: TextStyle(color: Colors.white),
         ),
         Text(
-          "Deadline için sıralama algoritması değiştiği için daha önceki sürümde eklenmiş deadlineların silinmesinde sıkıntı çıkabilir. Uygulamanın datasını silin ya da uygulamayı silip baştan yükleyin.\n",
-          style: TextStyle(color: Colors.white),
-        ),
-        Text(
-          "Kurslara renk özelliği geldi. Yine daha önce eklenmiş kurslarda sıkıntı çıkarsa screenshotlarla bana ulaşın, uygulamanın datasını silip tekrar deneyin. Data sıfırlanınca sorun çıkmaması lazım.\n",
-          style: TextStyle(color: Colors.white),
-        ),
-        Text(
-          "Şimdi düşününce betadan çıkana kadar bol bol datayı sıfırlayabilirsiniz hazırlıklı olun :d",
+"""
+  NOTIFICATIONS HERE!
+  Her sabah o günkü deadlinelarınızın bildirimlerini alacaksınız. Şu an bu uygulama çok çok çok kararsız çünkü kodla bir yere kadar test edebiliyorum. Bu hafta uygulamayı biraz kullanıp bir şeylerin çökmediğinden emin olacağım.
+
+  Uygulamayı biraz spagetti yazmıştım aklımda birkaç güzel fikir var, onları yapmadan kodu bir toplamak istedim.
+  Sevgili beta testerlarıma bir de sorum olarak. Büyük ihtimal bu uygulamayı bu isimle yayınlayamayacağım Metu ve Budddy ayrı ayrı telif yeme ihtimali var.
+O yüzden yakın zamanda bir isim anketi açmayı düşünüyorum. İsim fikirleriniz varsa anket öncesi bana ulaşabilirsiniz.
+""",
           style: TextStyle(color: Colors.white),
         ),
       ],

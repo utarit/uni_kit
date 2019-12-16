@@ -214,6 +214,7 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
                       child: widget.course == null
                           ? TextFormField(
                               controller: courseAcronymController,
+                              textCapitalization: TextCapitalization.characters,
                               decoration: new InputDecoration(
                                 labelText: "Enter Course Acronym",
                                 fillColor: Colors.white,
@@ -277,6 +278,7 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         controller: courseNameController,
+                        textCapitalization: TextCapitalization.words,
                         decoration: new InputDecoration(
                           labelText: "Enter Course Name",
                           fillColor: Colors.white,

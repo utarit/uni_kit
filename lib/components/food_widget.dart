@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_kit/models/food.dart';
-import 'package:uni_kit/utils/common_functions.dart';
 
 class FoodWidget extends StatefulWidget {
   @override
@@ -10,10 +9,14 @@ class FoodWidget extends StatefulWidget {
 
 class _FoodWidgetState extends State<FoodWidget>
     with AutomaticKeepAliveClientMixin {
+
+
   @override
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     print("Food Widget built");
     Food food = Provider.of<Food>(context);
 
@@ -42,7 +45,7 @@ class _FoodWidgetState extends State<FoodWidget>
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(food.lunch.length, (index) {
-                  return Text(capitalizeFirstLetter(food.lunch[index]["name"]),
+                  return Text(food.lunch[index],
                       style: TextStyle(color: Colors.white));
                 })),
           ),
@@ -67,7 +70,7 @@ class _FoodWidgetState extends State<FoodWidget>
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(food.dinner.length, (index) {
-                  return Text(capitalizeFirstLetter(food.dinner[index]["name"]),
+                  return Text(food.dinner[index],
                       style: TextStyle(color: Colors.white));
                 })),
           ),

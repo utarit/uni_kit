@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uni_kit/utils/common_functions.dart';
 
 
 class PoolWidget extends StatelessWidget {
-  final data;
-  PoolWidget({this.data});
+
 
   @override
   Widget build(BuildContext context) {
+    var data = Provider.of<TimeOfDay>(context);
     if (data == null) {
       return Text(
         "Havuz şu an genel kullanıma açık değil :|",

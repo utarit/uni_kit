@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:uni_kit/models/deadline.dart';
 import 'package:uni_kit/screens/deadline_edit_screen.dart';
+import 'package:uni_kit/screens/navigation_screen.dart';
 import 'package:uni_kit/utils/common_functions.dart';
 
 class DeadlineScreen extends StatefulWidget {
@@ -10,12 +12,67 @@ class DeadlineScreen extends StatefulWidget {
 }
 
 class _DeadlineScreenState extends State<DeadlineScreen> {
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   final Map<String, Color> colorList = {
     "lastDay": Colors.red,
     "lastWeek": Colors.orange,
     "others": Colors.green,
     "passed": Colors.grey
   };
+
+  @override
+  void initState() {
+    super.initState();
+
+    initializeNotifications();
+  }
+
+  Future onSelectNotification(String payload) async  {
+    //flutterLocalNotificationsPlugin.cancelAll();
+    await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NavigationScreen()),
+      );
+  }
+
+  void initializeNotifications() {
+    final settingsAndroid = AndroidInitializationSettings('app_icon');
+    final settingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: (id, title, body, payload) =>
+            onSelectNotification(payload));
+
+    flutterLocalNotificationsPlugin.initialize(
+        InitializationSettings(settingsAndroid, settingsIOS),
+        onSelectNotification: onSelectNotification);
+      
+
+    scheduleNotification();
+  }
+
+  void scheduleNotification() async {
+    var time =  Time(8, 30, 0);
+    var deadlines = await sortedDeadlines();
+    var todaysDeadlines = deadlines.where((deadline) => deadline.endTime.difference(DateTime.now()) < Duration(days: 1)).toList();
+
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'com.maks.metu_buddy',
+      'METU Buddy',
+      'Deadline Reminder',
+      playSound: false
+    );
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    NotificationDetails platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    for (var deadline in todaysDeadlines) {
+      await flutterLocalNotificationsPlugin.showDailyAtTime(
+          deadline.key,
+          'Son 1 gün 🐣. ',
+          "${deadline.description}",
+          time,
+          platformChannelSpecifics);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,11 +158,17 @@ class _DeadlineScreenState extends State<DeadlineScreen> {
                   children: <Widget>[
                     Text(
                       "${t.day} ${months[t.month]}",
-                      style: TextStyle(color: chooseTileColor(deadline.endTime), fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: chooseTileColor(deadline.endTime),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                     Text(
                       "${formattedNum(t.hour)}:${formattedNum(t.minute)}",
-                      style: TextStyle(color: chooseTileColor(deadline.endTime), fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: chooseTileColor(deadline.endTime),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -119,16 +182,17 @@ class _DeadlineScreenState extends State<DeadlineScreen> {
 
   chooseTileColor(DateTime deadline) {
     final now = DateTime.now();
-    if(deadline.isBefore(now)){
+    if (deadline.isBefore(now)) {
       return Colors.grey;
-    } else if(deadline.difference(now) < Duration(days: 1)){
+    } else if (deadline.difference(now) < Duration(days: 1)) {
       return Colors.red;
-    } else if(deadline.difference(now) < Duration(days: 7)){
+    } else if (deadline.difference(now) < Duration(days: 7)) {
       return Colors.orange;
     } else {
       return Colors.green;
     }
   }
+
   Future<List<Deadline>> sortedDeadlines() async {
     await Hive.openBox("deadlines");
     final deadlinesBox = Hive.box("deadlines");

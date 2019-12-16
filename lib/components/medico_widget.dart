@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uni_kit/constants/medico_departments.dart';
 import 'package:uni_kit/models/medico.dart';
 
 
-const List<String> categories = [
-  "PRATİSYEN HEKİM",
-  "DİŞ HEKİMİ",
-  "FİZİK TEDAVİ",
-  "KULAK BURUN BOĞAZ",
-  "DERMATOLOJİ",
-  "ÇOCUK HASTALIKLARI",
-  "KADIN DOĞUM",
-  "PSİKİYATRİ",
-  "GÖĞÜS HASTALIKLARI",
-  "İÇ HASTALIKLARI",
-  "GÖZ HASTALIKLARI",
-];
 
-class MedicoWidget extends StatelessWidget {
-  // final data;
-  // MedicoWidget({this.data});
+class MedicoWidget extends StatefulWidget  {
 
+  @override
+  _MedicoWidgetState createState() => _MedicoWidgetState();
+}
+
+class _MedicoWidgetState extends State<MedicoWidget> with AutomaticKeepAliveClientMixin {
+  
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     var medico = Provider.of<Medico>(context);
     print("Medico widget built");
     List<Doctor> data = medico?.doctors;
@@ -33,27 +28,32 @@ class MedicoWidget extends StatelessWidget {
       );
     } else {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(
-          data.length,
-          (index) {
-            Doctor doctor = data[index];
-            return Container(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _writeCategory(index),
-                    Text(
-                      "${doctor.name}",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    Text("${doctor.status}",
-                        style: TextStyle(color: Colors.white60, fontSize: 12))
-                  ],
-                ));
-          },
-        ),
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(
+              4,
+              (index) {
+                Doctor doctor = data[index];
+                return Container(
+                    padding: EdgeInsets.symmetric(vertical: 4.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _writeCategory(index),
+                        Text(
+                          "${doctor.name}",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text("${doctor.status}",
+                            style: TextStyle(color: Colors.white60, fontSize: 12))
+                      ],
+                    ));
+              },
+            ),
+          ),
+          Icon(Icons.more_horiz, color: Colors.white,)
+        ],
       );
     }
   }
@@ -104,7 +104,7 @@ class MedicoWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 4.0,),
       child: Text(category,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, decoration: TextDecoration.underline,)),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14)),
     );
   }
 }
