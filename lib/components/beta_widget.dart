@@ -12,8 +12,7 @@ class BetaWidget extends StatelessWidget {
         ),
         Text(
 """
-  NOTIFICATIONS HERE!
-  Her sabah o günkü deadlinelarınızın bildirimlerini alacaksınız. Şu an bu uygulama çok çok çok kararsız çünkü kodla bir yere kadar test edebiliyorum. Bu hafta uygulamayı biraz kullanıp bir şeylerin çökmediğinden emin olacağım.
+  NOTIFICATIONS ARE NOT READY! I WITHDRAW THE FEATURE
 
   Uygulamayı biraz spagetti yazmıştım aklımda birkaç güzel fikir var, onları yapmadan kodu bir toplamak istedim.
   Sevgili beta testerlarıma bir de sorum olarak. Büyük ihtimal bu uygulamayı bu isimle yayınlayamayacağım Metu ve Budddy ayrı ayrı telif yeme ihtimali var.

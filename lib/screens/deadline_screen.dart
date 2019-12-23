@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:uni_kit/models/deadline.dart';
 import 'package:uni_kit/screens/deadline_edit_screen.dart';
-import 'package:uni_kit/screens/navigation_screen.dart';
 import 'package:uni_kit/utils/common_functions.dart';
 
 class DeadlineScreen extends StatefulWidget {
@@ -12,7 +10,7 @@ class DeadlineScreen extends StatefulWidget {
 }
 
 class _DeadlineScreenState extends State<DeadlineScreen> {
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  // final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   final Map<String, Color> colorList = {
     "lastDay": Colors.red,
@@ -21,58 +19,58 @@ class _DeadlineScreenState extends State<DeadlineScreen> {
     "passed": Colors.grey
   };
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    initializeNotifications();
-  }
+  //   initializeNotifications();
+  // }
 
-  Future onSelectNotification(String payload) async  {
-    //flutterLocalNotificationsPlugin.cancelAll();
-    await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => NavigationScreen()),
-      );
-  }
+  // Future onSelectNotification(String payload) async  {
+  //   //flutterLocalNotificationsPlugin.cancelAll();
+  //   await Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => NavigationScreen()),
+  //     );
+  // }
 
-  void initializeNotifications() {
-    final settingsAndroid = AndroidInitializationSettings('app_icon');
-    final settingsIOS = IOSInitializationSettings(
-        onDidReceiveLocalNotification: (id, title, body, payload) =>
-            onSelectNotification(payload));
+  // void initializeNotifications() {
+  //   final settingsAndroid = AndroidInitializationSettings('app_icon');
+  //   final settingsIOS = IOSInitializationSettings(
+  //       onDidReceiveLocalNotification: (id, title, body, payload) =>
+  //           onSelectNotification(payload));
 
-    flutterLocalNotificationsPlugin.initialize(
-        InitializationSettings(settingsAndroid, settingsIOS),
-        onSelectNotification: onSelectNotification);
+  //   flutterLocalNotificationsPlugin.initialize(
+  //       InitializationSettings(settingsAndroid, settingsIOS),
+  //       onSelectNotification: onSelectNotification);
       
 
-    scheduleNotification();
-  }
+  //   scheduleNotification();
+  // }
 
-  void scheduleNotification() async {
-    var time =  Time(8, 30, 0);
-    var deadlines = await sortedDeadlines();
-    var todaysDeadlines = deadlines.where((deadline) => deadline.endTime.difference(DateTime.now()) < Duration(days: 1)).toList();
+  // void scheduleNotification() async {
+  //   var time =  Time(8, 30, 0);
+  //   var deadlines = await sortedDeadlines();
+  //   var todaysDeadlines = deadlines.where((deadline) => deadline.endTime.difference(DateTime.now()) < Duration(days: 1)).toList();
 
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.maks.metu_buddy',
-      'METU Buddy',
-      'Deadline Reminder',
-      playSound: false
-    );
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    for (var deadline in todaysDeadlines) {
-      await flutterLocalNotificationsPlugin.showDailyAtTime(
-          deadline.key,
-          'Son 1 gün 🐣. ',
-          "${deadline.description}",
-          time,
-          platformChannelSpecifics);
-    }
-  }
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //     'com.maks.metu_buddy',
+  //     'METU Buddy',
+  //     'Deadline Reminder',
+  //     playSound: false
+  //   );
+  //   var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  //   NotificationDetails platformChannelSpecifics = NotificationDetails(
+  //       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  //   for (var deadline in todaysDeadlines) {
+  //     await flutterLocalNotificationsPlugin.showDailyAtTime(
+  //         deadline.key,
+  //         'Son 1 gün 🐣. ',
+  //         "${deadline.description}",
+  //         time,
+  //         platformChannelSpecifics);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

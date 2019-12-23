@@ -15,7 +15,7 @@ class RingProvider {
               totalMin(ring.schedule.last.hour, ring.schedule.last.minute) &&
           totalMin(timeNow.hour + 1, timeNow.minute) >=
               totalMin(ring.schedule.first.hour, ring.schedule.first.minute)) {
-        //print(timeNow);
+        //// print(timeNow);
         availableRings.add(ring);
       }
     }
@@ -37,7 +37,7 @@ class RingProvider {
     yield getRingHours();
     Duration delay = Duration(minutes: 1);
     yield* Stream<List<ClosestRing>>.periodic(delay, (_) {
-      print("Ring Updated!");
+      // print("Ring Updated!");
       return getRingHours();
     });
   }

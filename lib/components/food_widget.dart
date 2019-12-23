@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_kit/models/food.dart';
 
@@ -17,7 +18,7 @@ class _FoodWidgetState extends State<FoodWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    print("Food Widget built");
+    // // print("Food Widget built");
     Food food = Provider.of<Food>(context);
 
     if (food != null) {
@@ -82,9 +83,6 @@ class _FoodWidgetState extends State<FoodWidget>
               style: TextStyle(color: Colors.white)));
     }
     return Center(
-        child: Text(
-      "Datayı alamadım yav :sad:",
-      style: TextStyle(color: Colors.white),
-    ));
+        child: JumpingDotsProgressIndicator(fontSize: 25.0, color: Colors.white,),);
   }
 }

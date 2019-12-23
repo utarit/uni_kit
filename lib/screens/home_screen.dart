@@ -9,6 +9,7 @@ import 'package:uni_kit/constants/dashboard_tiles.dart';
 import 'package:uni_kit/screens/medico_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+
   _contentSelection(index) {
     Widget child;
     switch (index) {
@@ -30,13 +31,13 @@ class HomeScreen extends StatelessWidget {
       default:
         child = null;
     }
-
+    
     return child;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Home built");
+    // print("Home built");
     return Column(
       children: <Widget>[
         Padding(
@@ -75,13 +76,15 @@ class HomeScreen extends StatelessWidget {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MedicoDetailsScreen()),
-                    );
-                  },
+                  onTap: index == 1
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MedicoDetailsScreen()),
+                          );
+                        }
+                      : null,
                   child: Container(
                     padding: EdgeInsets.all(16.0),
                     color: dashboardTiles[index]["color"],

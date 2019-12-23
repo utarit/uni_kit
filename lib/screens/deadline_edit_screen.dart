@@ -138,6 +138,7 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                       ),
                       TextFormField(
                         controller: descriptionController,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                             labelText: 'Enter Deadline Description'),
                         validator: (value) {

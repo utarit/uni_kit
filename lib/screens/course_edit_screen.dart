@@ -65,7 +65,7 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
   //                                       onChanged: (val) {
   //                                         setModalState(() {
   //                                           _tmpDay = val;
-  //                                           // print(_tmpDay);
+  //                                           // // print(_tmpDay);
   //                                         });
   //                                       },
   //                                     ))
@@ -90,7 +90,7 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
   //                                       onChanged: (val) {
   //                                         setModalState(() {
   //                                           _tmpHour = val;
-  //                                           // print(_tmpHour);
+  //                                           // // print(_tmpHour);
   //                                         });
   //                                       },
   //                                     ))

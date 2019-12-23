@@ -157,7 +157,7 @@ class _CourseScreenState extends State<CourseScreen>
                           itemCount: widget.course.hours.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
-                            // print(widget.course.hours);
+                            // // print(widget.course.hours);
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ClipRRect(

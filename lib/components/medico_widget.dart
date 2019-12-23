@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_kit/constants/medico_departments.dart';
 import 'package:uni_kit/models/medico.dart';
@@ -20,11 +21,11 @@ class _MedicoWidgetState extends State<MedicoWidget> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
     var medico = Provider.of<Medico>(context);
-    print("Medico widget built");
+    // // print("Medico widget built");
     List<Doctor> data = medico?.doctors;
     if (data == null) {
       return Center(
-        child: CircularProgressIndicator(),
+        child: JumpingDotsProgressIndicator(fontSize: 25.0, color: Colors.white,),
       );
     } else {
       return Column(

@@ -7,7 +7,7 @@ class RingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Ring Built");
+    // print("Ring Built");
     var ringList = Provider.of<List<ClosestRing>>(context);
     if (ringList == null || ringList.isEmpty) {
       return Text(

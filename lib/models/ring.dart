@@ -28,7 +28,7 @@ class Ring {
     TimeOfDay tmp = startTime;
     do {
       timeArr.add(tmp);
-      //print(tmp);
+      //// // print(tmp);
       int nextMin = tmp.minute + step;
       tmp = nextMin >= 60
           ? TimeOfDay(hour: tmp.hour + 1, minute: nextMin % 60)

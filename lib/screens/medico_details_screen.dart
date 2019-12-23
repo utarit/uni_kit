@@ -8,7 +8,7 @@ class MedicoDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var medico = Provider.of<Medico>(context);
-    print("Medico Screen built");
+    // print("Medico Screen built");
     List<Doctor> data = medico?.doctors;
     if (data == null) {
       return Scaffold(
