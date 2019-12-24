@@ -72,6 +72,12 @@ class _DeadlineScreenState extends State<DeadlineScreen> {
   //   }
   // }
 
+@override
+  void dispose() {
+    // TODO: implement dispose
+    Hive.close();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -190,6 +196,7 @@ class _DeadlineScreenState extends State<DeadlineScreen> {
       return Colors.green;
     }
   }
+
 
   Future<List<Deadline>> sortedDeadlines() async {
     await Hive.openBox("deadlines");

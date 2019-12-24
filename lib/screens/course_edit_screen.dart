@@ -159,6 +159,13 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    Hive.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (!loaded) {
       return Scaffold();

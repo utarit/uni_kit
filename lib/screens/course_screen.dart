@@ -29,6 +29,7 @@ class _CourseScreenState extends State<CourseScreen>
   @override
   void dispose() {
     _controller.dispose();
+    Hive.close();
     super.dispose();
   }
 

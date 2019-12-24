@@ -27,6 +27,14 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    Hive.close();
+    super.dispose();
+  }
+  
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

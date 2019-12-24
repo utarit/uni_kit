@@ -107,7 +107,12 @@ class _AgendaScreenState extends State<AgendaScreen> {
     //   Hive.box("courses").put(result.key, result);
     // }
   }
-
+@override
+  void dispose() {
+    // TODO: implement dispose
+    Hive.close();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
