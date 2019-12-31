@@ -212,7 +212,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(left: 4.0),
-            child: Text("Week ${ind + 1}: ${course.syllabus[ind]}"),
+            child: Text(ind < 14 ? "Week ${ind + 1}: ${course.syllabus[ind]}" : "Semester Ended"),
           ),
           trailing: Icon(
             Icons.info,

@@ -1,7 +1,7 @@
 name: uni_kit
 description: Emergency Kit for METU students
 
-version: 1.0.13+13
+version: 1.0.14+14
 
 environment:
   sdk: ">=2.2.2 <3.0.0"

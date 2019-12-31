@@ -100,7 +100,8 @@ List<Ring> ringList = [
       [
         "A2",
         "Batı Yurtlar",
-        "Teknokent" "Hazırlık",
+        "Teknokent",
+        "Hazırlık",
         "Doğu Yurtlar",
         "A1",
         "Rektörlük",
@@ -118,7 +119,7 @@ List<Ring> ringList = [
         "Batı Yurtlar",
         "Doğu Yurtlar",
         "A1",
-        "Rekötürlük",
+        "Rektörlük",
         "Batı Yurtlar",
         "A2"
       ],
