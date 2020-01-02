@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
 import 'package:uni_kit/features/course_schedule/ui/screens/agenda_screen.dart';
 import 'package:uni_kit/features/dashboard/ui/screens/home_screen.dart';
+import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
 import 'package:uni_kit/features/todo_list/ui/screens/deadline_screen.dart';
 
 
@@ -23,6 +26,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void dispose() {
     Hive.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<CourseProvider>(context, listen: false).getCourses();
+    Provider.of<TodoProvider>(context, listen: false).getDeadlines();
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:uni_kit/features/course_schedule/data/models/course.dart';
+import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
 
 class CourseEditScreen extends StatefulWidget {
   final Course course;
@@ -17,7 +18,6 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
   List<TextEditingController> syllabusControllerList;
   List<CourseTime> lessonHours;
   int _selectedColor = 0;
-  bool loaded = false;
 
   final courseColors = [
     Colors.red.value,
@@ -30,8 +30,6 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
     Colors.indigo.value,
     Colors.lime.value
   ];
-
-
 
   @override
   void initState() {
@@ -61,244 +59,196 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
         syllabusControllerList.add(TextEditingController());
       }
     }
-    _openHiveBox();
+    // _openHiveBox();
   }
 
-  _openHiveBox() async {
-    await Hive.openBox("courses");
-    setState(() {
-      loaded = true;
-    });
-  }
-
-  @override
-  void dispose() {
-    Hive.close();
-    super.dispose();
-  }
+  // _openHiveBox() async {
+  //   await Hive.openBox("courses");
+  //   setState(() {
+  //     loaded = true;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    if (!loaded) {
-      return Scaffold();
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          leading: IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        leading: IconButton(
+          color: Colors.black,
+          icon: Icon(
+            Icons.arrow_back,
+            size: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "${widget.course == null ? "Add" : "Edit"} Course",
+          style: TextStyle(
+            fontFamily: "Galano",
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
             color: Colors.black,
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
             icon: Icon(
-              Icons.arrow_back,
+              Icons.done,
+              color: Colors.black,
               size: 30,
             ),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              _submitCourse();
+            },
           ),
-          title: Text(
-            "${widget.course == null ? "Add" : "Edit"} Course",
-            style: TextStyle(
-              fontFamily: "Galano",
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.done,
-                color: Colors.black,
-                size: 30,
-              ),
-              onPressed: () {
-                _submitCourse();
-              },
-            ),
-            SizedBox(
-              width: 4,
-            )
-          ],
-        ),
-        body: Form(
-            key: _formKey,
-            child: Container(
-              padding: EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: widget.course == null
-                          ? TextFormField(
-                              controller: courseAcronymController,
-                              textCapitalization: TextCapitalization.characters,
-                              decoration: new InputDecoration(
-                                labelText: "Enter Course Acronym",
-                                fillColor: Colors.white,
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(15.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                //fillColor: Colors.green
+          SizedBox(
+            width: 4,
+          )
+        ],
+      ),
+      body: Form(
+          key: _formKey,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: widget.course == null
+                        ? TextFormField(
+                            controller: courseAcronymController,
+                            textCapitalization: TextCapitalization.characters,
+                            decoration: InputDecoration(
+                              labelText: "Enter Course Acronym",
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(),
                               ),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter some text';
-                                } else if (value.length > 7) {
-                                  return 'Acronym cannot be longer that 7 character';
-                                } else if (Hive.box("courses")
-                                    .containsKey(value.toUpperCase())) {
-                                  return "This course is already in your program";
-                                }
-                                return null;
-                              },
-                            )
-                          : Text(
-                              widget.course.acronym,
-                              style: TextStyle(
-                                fontFamily: "Galano",
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                              //fillColor: Colors.green
                             ),
-                    ),
-                    SizedBox(
-                      height: 75,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: courseColors.length,
-                        itemBuilder: (context, index) {
-                          return FlatButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              setState(() {
-                                _selectedColor = index;
-                              });
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter some text';
+                              } else if (value.length > 7) {
+                                return 'Acronym cannot be longer that 7 character';
+                              }
+                              // else if (await Provider.of<CourseProvider>(context, listen: false).isThereSameCourse(value)) {
+                              //   return "This course is already in your program";
+                              // }
+                              return null;
                             },
-                            child: Container(
-                              margin: EdgeInsets.all(8),
-                              width: 75,
-                              decoration: BoxDecoration(
-                                border: _selectedColor == index
-                                    ? Border.all(color: Colors.black, width: 2)
-                                    : Border.all(width: 0),
-                                borderRadius: BorderRadius.circular(12),
-                                color: Color(courseColors[index]),
-                              ),
+                          )
+                        : Text(
+                            widget.course.acronym,
+                            style: TextStyle(
+                              fontFamily: "Galano",
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: courseNameController,
-                        textCapitalization: TextCapitalization.words,
-                        decoration: new InputDecoration(
-                          labelText: "Enter Course Name",
-                          fillColor: Colors.white,
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(15.0),
-                            borderSide: new BorderSide(),
                           ),
+                  ),
+                  SizedBox(
+                    height: 75,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: courseColors.length,
+                      itemBuilder: (context, index) {
+                        return FlatButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            setState(() {
+                              _selectedColor = index;
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(8),
+                            width: 75,
+                            decoration: BoxDecoration(
+                              border: _selectedColor == index
+                                  ? Border.all(color: Colors.black, width: 2)
+                                  : Border.all(width: 0),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Color(courseColors[index]),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: courseNameController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: new InputDecoration(
+                        labelText: "Enter Course Name",
+                        fillColor: Colors.white,
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: new BorderSide(),
                         ),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        } else if (value.length > 30) {
+                          return 'No more than 30 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 8),
+                    child: Text(
+                      "Course Hours",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  _buildHourSelectionTable(context),
+                  // RaisedButton(
+                  //   child: Text("Add Lesson Hour"),
+                  //   onPressed: () {
+                  //     _showBottomSheet(context);
+                  //   },
+                  // ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    "Syllabus",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Column(
+                    children: List.generate(14, (index) {
+                      return TextFormField(
+                        // initialValue: "-",
+                        controller: syllabusControllerList[index],
+                        decoration: InputDecoration(
+                            labelText: 'Enter Week ${index + 1}'),
                         validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter some text';
-                          } else if (value.length > 30) {
+                          if (value.length > 30) {
                             return 'No more than 30 characters';
                           }
                           return null;
                         },
-                      ),
-                    ),
-                    // Container(
-                    //   alignment: Alignment.topLeft,
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children:
-                    //         List.generate(lessonHours?.length ?? 0, (index) {
-                    //       return Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: Row(
-                    //           children: <Widget>[
-                    //             RichText(
-                    //               text: TextSpan(
-                    //                   style: TextStyle(
-                    //                       color: Colors.black, fontSize: 15),
-                    //                   children: [
-                    //                     TextSpan(
-                    //                         text: "Lesson ${index + 1}: ",
-                    //                         style: TextStyle(
-                    //                             fontWeight: FontWeight.bold)),
-                    //                     TextSpan(
-                    //                         text:
-                    //                             "${days[lessonHours[index].day - 1].text} ${hours[lessonHours[index].hour].text}"),
-                    //                   ]),
-                    //             ),
-                    //             IconButton(
-                    //               icon: Icon(Icons.delete),
-                    //               onPressed: () {
-                    //                 setState(() {
-                    //                   lessonHours.removeAt(index);
-                    //                 });
-                    //               },
-                    //             )
-                    //           ],
-                    //         ),
-                    //       );
-                    //     }),
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 8),
-                      child: Text(
-                        "Course Hours",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    _buildHourSelectionTable(context),
-                    // RaisedButton(
-                    //   child: Text("Add Lesson Hour"),
-                    //   onPressed: () {
-                    //     _showBottomSheet(context);
-                    //   },
-                    // ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      "Syllabus",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Column(
-                      children: List.generate(14, (index) {
-                        return TextFormField(
-                          // initialValue: "-",
-                          controller: syllabusControllerList[index],
-                          decoration: InputDecoration(
-                              labelText: 'Enter Week ${index + 1}'),
-                          validator: (value) {
-                            if (value.length > 30) {
-                              return 'No more than 30 characters';
-                            }
-                            return null;
-                          },
-                        );
-                      }),
-                    ),
-                  ],
-                ),
+                      );
+                    }),
+                  ),
+                ],
               ),
-            )),
-      );
-    }
+            ),
+          )),
+    );
   }
 
   void _submitCourse() async {
@@ -313,8 +263,10 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
               .map((f) => f.text.isEmpty ? "-" : f.text)
               .toList());
 
-      await Hive.openBox("courses");
-      Hive.box("courses").put(result.acronym, result);
+      Provider.of<CourseProvider>(context, listen: false)
+          .editCourse(result.acronym, result);
+      // await Hive.openBox("courses");
+      // Hive.box("courses").put(result.acronym, result);
       Navigator.pop(context);
       if (widget.course != null) {
         Navigator.pop(context);

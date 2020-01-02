@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:uni_kit/core/utils/common_functions.dart';
 import 'package:uni_kit/features/course_schedule/data/models/course.dart';
+import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
+import 'package:uni_kit/features/todo_list/data/models/deadline.dart';
+import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
 
 class DeadlineEditScreen extends StatefulWidget {
   @override
@@ -12,7 +16,6 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
   final _formKey = GlobalKey<FormState>();
   DateTime deadline;
   final descriptionController = TextEditingController();
-  var coursesBox;
   int _selectedCourseIndex;
 
   String fs(int n) => n < 9 ? "0$n" : "$n";
@@ -23,18 +26,14 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
   void initState() {
     super.initState();
     deadline = DateTime.now();
-    _getCourseData();
+    _selectedCourseIndex = 0;
   }
-
-  @override
-  void dispose() {
-    Hive.close();
-    super.dispose();
-  }
-  
 
   @override
   Widget build(BuildContext context) {
+    var deadlineProvider = Provider.of<TodoProvider>(context, listen: false);
+    var courses = Provider.of<CourseProvider>(context, listen: false).courses;
+
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -48,19 +47,16 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
               // Validate returns true if the form is valid, or false
               // otherwise.
               if (_formKey.currentState.validate()) {
-                Course course;
-                if (_selectedCourseIndex != null) {
-                  course = coursesBox.getAt(_selectedCourseIndex) as Course;
-                }
-                Map<String, dynamic> data = {
-                  "course": course == null
-                      ? Course(acronym: "OTHER")
-                      : course,
-                  "description": descriptionController.text,
-                  "deadline": deadline
-                };
+                int key = DateTime.now().millisecondsSinceEpoch % UPPER_LIMIT;
+                Deadline result = Deadline(
+                    course: courses[_selectedCourseIndex] ??
+                        Course(acronym: "OTHER"),
+                    description: descriptionController.text,
+                    endTime: deadline,
+                    key: key);
+                deadlineProvider.editDeadline(key, result);
                 Future.delayed(const Duration(milliseconds: 100), () {
-                  Navigator.pop(context, data);
+                  Navigator.pop(context);
                 });
               }
             },
@@ -89,7 +85,7 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
               color: Colors.black),
         ),
       ),
-      body: coursesBox != null
+      body: courses != null
           ? Form(
               key: _formKey,
               child: Padding(
@@ -98,56 +94,22 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(
-                        height: 60,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: coursesBox.length,
-                          itemBuilder: (context, index) {
-                            final course = coursesBox.getAt(index) as Course;
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedCourseIndex = index;
-                                  });
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  child: Container(
-                                      padding: EdgeInsets.all(12.0),
-                                      color: index == _selectedCourseIndex
-                                          ? Color(course.color)
-                                          : Color(course.color).withOpacity(0.5),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.assignment,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            "${course.acronym}",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        ],
-                                      )),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      buildCourseList(context, courses),
+                      SizedBox(height: 16.0,),
                       TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
                         controller: descriptionController,
                         textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration(
-                            labelText: 'Enter Deadline Description'),
+                        decoration:  InputDecoration(
+                                labelText: "Enter Todo Description",
+                                fillColor: Colors.white,
+                                border:  OutlineInputBorder(
+                                  borderRadius:  BorderRadius.circular(15.0),
+                                  borderSide:  BorderSide(),
+                                ),
+                                //fillColor: Colors.green
+                              ),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter some text';
@@ -189,10 +151,52 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
     );
   }
 
-  void _getCourseData() async {
-    await Hive.openBox("courses");
-    setState(() {
-      coursesBox = Hive.box("courses");
-    });
+  buildCourseList(context, courses) {
+    if(courses.isEmpty){
+      return Text("No Courses Added");
+    }
+    return SizedBox(
+      height: 60,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: courses.length,
+        itemBuilder: (context, index) {
+          final course = courses[index];
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedCourseIndex = index;
+                });
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Container(
+                    padding: EdgeInsets.all(12.0),
+                    color: index == _selectedCourseIndex
+                        ? Color(course.color)
+                        : Color(course.color).withOpacity(0.5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.assignment,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "${course.acronym}",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    )),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
