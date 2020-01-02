@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:uni_kit/models/course.dart';
-import 'package:uni_kit/providers/providers.dart';
-import 'package:uni_kit/screens/navigation_screen.dart';
+import 'package:uni_kit/core/providers/providers.dart';
+import 'package:uni_kit/features/course_schedule/data/models/course.dart';
+import 'package:uni_kit/features/dashboard/ui/screens/navigation_screen.dart';
+import 'package:uni_kit/features/todo_list/data/models/deadline.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-import 'models/deadline.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
