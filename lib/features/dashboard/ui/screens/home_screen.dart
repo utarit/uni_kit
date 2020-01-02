@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:uni_kit/features/dashboard/data/constants/dashboard_tiles.dart';
 import 'package:uni_kit/features/dashboard/ui/screens/medico_details_screen.dart';
+import 'package:uni_kit/features/dashboard/ui/screens/ring_details_screen.dart';
 import 'package:uni_kit/features/dashboard/ui/widgets/beta_widget.dart';
 import 'package:uni_kit/features/dashboard/ui/widgets/food_widget.dart';
 import 'package:uni_kit/features/dashboard/ui/widgets/medico_widget.dart';
 import 'package:uni_kit/features/dashboard/ui/widgets/pool_widget.dart';
 import 'package:uni_kit/features/dashboard/ui/widgets/ring_widget.dart';
 
-
 class HomeScreen extends StatelessWidget {
-
   _contentSelection(index) {
     Widget child;
     switch (index) {
@@ -32,8 +31,33 @@ class HomeScreen extends StatelessWidget {
       default:
         child = null;
     }
-    
+
     return child;
+  }
+
+  _screenSelection(index, context) {
+    Function navigation;
+    switch (index) {
+      case 0:
+        navigation = null;
+        break;
+      case 1:
+        navigation = (context) => MedicoDetailsScreen();
+        break;
+      case 2:
+        navigation = (context) => RingDetailsScreen();
+        break;
+      case 3:
+        navigation = null;
+        break;
+      case 4:
+        navigation = null;
+        break;
+      default:
+        navigation = null;
+    }
+
+    return navigation;
   }
 
   @override
@@ -77,15 +101,13 @@ class HomeScreen extends StatelessWidget {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: GestureDetector(
-                  onTap: index == 1
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MedicoDetailsScreen()),
-                          );
-                        }
-                      : null,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: _screenSelection(index, context)),
+                    );
+                  },
                   child: Container(
                     padding: EdgeInsets.all(16.0),
                     color: dashboardTiles[index]["color"],

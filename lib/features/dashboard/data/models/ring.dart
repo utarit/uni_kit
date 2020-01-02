@@ -67,9 +67,10 @@ class WeekDay {
 
 class ClosestRing {
   Ring ring;
+  TimeOfDay prevTime;
   TimeOfDay time;
 
-  ClosestRing({this.ring, this.time});
+  ClosestRing({this.ring, this.time, this.prevTime});
 }
 
 

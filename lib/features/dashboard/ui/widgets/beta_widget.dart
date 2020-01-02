@@ -7,18 +7,21 @@ class BetaWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "v.1.0.9\n",
+          "v.1.0.15\n",
           style: TextStyle(color: Colors.white),
         ),
         Text(
 """
-  NOTIFICATIONS ARE NOT READY! I WITHDRAW THE FEATURE
+    ( (            
+    ) )       
+  ........   
+  |       |])   
+  \\      /  
+   `----'    
 
-  Uygulamayı biraz spagetti yazmıştım aklımda birkaç güzel fikir var, onları yapmadan kodu bir toplamak istedim.
-  Sevgili beta testerlarıma bir de sorum olarak. Büyük ihtimal bu uygulamayı bu isimle yayınlayamayacağım Metu ve Budddy ayrı ayrı telif yeme ihtimali var.
-O yüzden yakın zamanda bir isim anketi açmayı düşünüyorum. İsim fikirleriniz varsa anket öncesi bana ulaşabilirsiniz.
+Good Luck with Finals...   
 """,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, letterSpacing: 3),
         ),
       ],
     );

@@ -15,16 +15,17 @@ class RingProvider {
               totalMin(ring.schedule.last.hour, ring.schedule.last.minute) &&
           totalMin(timeNow.hour + 1, timeNow.minute) >=
               totalMin(ring.schedule.first.hour, ring.schedule.first.minute)) {
-        //// print(timeNow);
+        //print(timeNow);
         availableRings.add(ring);
       }
     }
     List<ClosestRing> closestRings = [];
     for (var ring in availableRings) {
-      for (TimeOfDay ringTime in ring.schedule) {
+      for (int i = 0; i < ring.schedule.length; i++) {
+        TimeOfDay ringTime = ring.schedule[i];
         if (totalMin(ringTime.hour, ringTime.minute) >=
             totalMin(timeNow.hour, timeNow.minute)) {
-          closestRings.add(ClosestRing(ring: ring, time: ringTime));
+          closestRings.add(ClosestRing(ring: ring, time: ringTime, prevTime: i == 0 ? null: ring.schedule[i-1]));
           break;
         }
       }

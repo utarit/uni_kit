@@ -23,7 +23,7 @@ class RingWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                "${ringList[index].ring.name} - ${formattedNum(ringList[index].time.hour)}:${formattedNum(ringList[index].time.minute)}",
+                "${ringList[index].ring.name}: ${ringList[index].prevTime != null ? formattedNum(ringList[index].prevTime.hour): '' }:${ringList[index].prevTime != null ? formattedNum(ringList[index].prevTime.minute) : ''} ->  ${formattedNum(ringList[index].time.hour)}:${formattedNum(ringList[index].time.minute)}",
                 style:
                     TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
               ),
