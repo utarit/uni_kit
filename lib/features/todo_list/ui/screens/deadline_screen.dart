@@ -16,9 +16,6 @@ class DeadlineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("Deadline Screen built");
-    var deadlineProvider = Provider.of<TodoProvider>(context);
-    var deadlines =
-        sortedDeadlines(deadlineProvider.deadlines);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,17 +47,25 @@ class DeadlineScreen extends StatelessWidget {
               style: TextStyle(color: Colors.black38)),
         ),
         Expanded(
-          child: buildListView(deadlines),
+          child: Selector<TodoProvider, List<Deadline>>(
+            selector: (context, TodoProvider todoProvider) =>
+                todoProvider.deadlines,
+            builder: (context, List<Deadline> deadlines, child) =>
+                buildListView(deadlines),
+          ),
         )
       ],
     );
   }
 
   ListView buildListView(List<Deadline> deadlines) {
+
+    var sorted = sortedDeadlines(deadlines);
+
     return ListView.builder(
-      itemCount: deadlines.length,
+      itemCount: sorted.length,
       itemBuilder: (context, index) {
-        final deadline = deadlines[index];
+        final deadline = sorted[index];
         var t = deadline.endTime;
         return Dismissible(
           direction: DismissDirection.endToStart,

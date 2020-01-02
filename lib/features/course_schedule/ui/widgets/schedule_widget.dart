@@ -10,11 +10,13 @@ class CourseScheduleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("Table built");
-    var courses = Provider.of<CourseProvider>(context).courses;
 
-    return Table(
-        columnWidths: {0: FlexColumnWidth(0.7)},
-        children: generateTable(courses));
+    return Selector<CourseProvider, List<Course>>(
+          selector: (context, courseProvider) =>  courseProvider.courses,
+          builder: (context, courses, child) => Table(
+          columnWidths: {0: FlexColumnWidth(0.7)},
+          children: generateTable(courses)),
+    );
   }
 
   List<TableRow> generateTable(List<Course> courses) {
