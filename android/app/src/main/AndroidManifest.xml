@@ -11,7 +11,7 @@
          
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="METU Buddy"
+        android:label="UniKit"
         android:icon="@mipmap/launcher_icon">
        <!-- <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">

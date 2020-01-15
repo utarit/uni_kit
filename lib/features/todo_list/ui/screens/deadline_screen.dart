@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uni_kit/core/utils/common_functions.dart';
+import 'package:uni_kit/features/course_schedule/data/models/course.dart';
+import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
 import 'package:uni_kit/features/todo_list/data/models/deadline.dart';
 import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
 import 'package:uni_kit/features/todo_list/ui/screens/deadline_edit_screen.dart';
+import 'package:uni_kit/features/todo_list/ui/widgets/todo_list_tile.dart';
 
 class DeadlineScreen extends StatelessWidget {
   final Map<String, Color> colorList = {
@@ -17,56 +19,122 @@ class DeadlineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print("Deadline Screen built");
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      // mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 45.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Container(
+          //color: Color(0xFFE2E6EE),
+          width: MediaQuery.of(context).size.width * 4 / 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                "Deadlines",
-                style: TextStyle(
-                    fontFamily: "Galano",
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 45.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "TODOs",
+                      style: TextStyle(
+                          fontFamily: "Galano",
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        _navigateDeadlineEditScreen(context);
+                      },
+                    )
+                  ],
+                ),
               ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  _navigateDeadlineEditScreen(context);
-                },
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 8.0),
+              //   child: Text("You can swipe to delete",
+              //       style: TextStyle(color: Colors.black38)),
+              // ),
+              Expanded(
+                child: Selector<TodoProvider, List<Deadline>>(
+                  selector: (context, TodoProvider todoProvider) =>
+                      todoProvider.deadlines,
+                  builder: (context, List<Deadline> deadlines, child) =>
+                      buildListView(deadlines),
+                ),
               )
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text("You can swipe to delete",
-              style: TextStyle(color: Colors.black38)),
-        ),
-        Expanded(
-          child: Selector<TodoProvider, List<Deadline>>(
-            selector: (context, TodoProvider todoProvider) =>
-                todoProvider.deadlines,
-            builder: (context, List<Deadline> deadlines, child) =>
-                buildListView(deadlines),
+        Container(
+          color: Color(0xFF232429),
+          width: MediaQuery.of(context).size.width * 1 / 5,
+          child: Selector<CourseProvider, List<Course>>(
+            selector: (context, CourseProvider courseProvider) =>
+                courseProvider.courses,
+            builder: (context, List<Course> courses, child) => Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 32.0),
+                //   child: Icon(
+                //     Icons.sort,
+                //     color: Colors.white,
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 32.0),
+                  child: buildCourseList(context, courses),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
           ),
         )
       ],
     );
   }
 
-  ListView buildListView(List<Deadline> deadlines) {
+  Widget buildCourseList(context, List<Course> courses) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(courses.length, (index) {
+          return Container(
+              height: MediaQuery.of(context).size.width * 1 / 5 - 30,
+              width: MediaQuery.of(context).size.width * 1 / 5 - 30,
+              padding: const EdgeInsets.all(4),
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                  color: Color(0xff3A3B40),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [BoxShadow(offset: Offset.fromDirection(3.14 / 2))]
+                  // border: Border.all(color: Colors.grey),
+                  ),
+              alignment: Alignment.center,
+              child: Text(
+                courses[index].acronym[0],
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Color(courses[index].color),
+                    fontWeight: FontWeight.bold),
+              ));
+        }));
+  }
 
+  ListView buildListView(List<Deadline> deadlines) {
     var sorted = sortedDeadlines(deadlines);
 
     return ListView.builder(
       itemCount: sorted.length,
       itemBuilder: (context, index) {
         final deadline = sorted[index];
-        var t = deadline.endTime;
+
         return Dismissible(
           direction: DismissDirection.endToStart,
           onDismissed: (DismissDirection direction) {
@@ -80,41 +148,7 @@ class DeadlineScreen extends StatelessWidget {
             child: Icon(Icons.delete, color: Colors.white),
           ),
           key: UniqueKey(),
-          child: Container(
-            // margin: EdgeInsets.only(bottom: 2),
-            color: chooseTileColor(deadline.endTime),
-            child: ListTile(
-              title: Text(deadline.course.acronym),
-              subtitle: Text(deadline.description),
-              trailing: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "${t.day} ${months[t.month]}",
-                      style: TextStyle(
-                          color: chooseTileColor(deadline.endTime),
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${formattedNum(t.hour)}:${formattedNum(t.minute)}",
-                      style: TextStyle(
-                          color: chooseTileColor(deadline.endTime),
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          child: TodoListTile(deadline),
         );
       },
     );

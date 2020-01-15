@@ -19,7 +19,9 @@ class BetaWidget extends StatelessWidget {
   \\      /  
    `----'    
 
-Good Luck with Finals...   
+Good Luck with Finals...
+
+(Checkout Ring Page by clicking the ring tile.)   
 """,
           style: TextStyle(color: Colors.white, letterSpacing: 3),
         ),

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: providers,
       child: MaterialApp(
-        title: 'METU Buddy',
+        title: 'UniKit',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: "Roboto"),
         home: NavigationScreen(),
