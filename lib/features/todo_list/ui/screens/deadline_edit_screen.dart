@@ -20,7 +20,7 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
 
   String fs(int n) => n < 9 ? "0$n" : "$n";
   String formattedDate(DateTime date) =>
-      "${fs(date.day)}/${fs(date.month)} ${fs(date.hour)}:${fs(date.minute)}";
+      "${days[date.weekday]}, ${fs(date.day)} ${months[date.month]} ${date.year}";
 
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          "Add Deadline",
+          "Add ToDo",
           style: TextStyle(
               fontFamily: "Galano",
               fontSize: 30,
@@ -95,21 +95,23 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       buildCourseList(context, courses),
-                      SizedBox(height: 16.0,),
+                      SizedBox(
+                        height: 16.0,
+                      ),
                       TextFormField(
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         controller: descriptionController,
                         textCapitalization: TextCapitalization.sentences,
-                        decoration:  InputDecoration(
-                                labelText: "Enter Todo Description",
-                                fillColor: Colors.white,
-                                border:  OutlineInputBorder(
-                                  borderRadius:  BorderRadius.circular(15.0),
-                                  borderSide:  BorderSide(),
-                                ),
-                                //fillColor: Colors.green
-                              ),
+                        decoration: InputDecoration(
+                          labelText: "Enter ToDo Description",
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            borderSide: BorderSide(),
+                          ),
+                          //fillColor: Colors.green
+                        ),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter some text';
@@ -117,30 +119,76 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                           return null;
                         },
                       ),
-                      Row(
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: () {
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: RaisedButton(
+                          child: Container(
+                            child: Text("Set Time"),
+                          ),
+                          onPressed: () {
                                 DatePicker.showDateTimePicker(context,
                                     showTitleActions: true,
                                     minTime: DateTime.now(),
                                     maxTime: DateTime.utc(
-                                        DateTime.now().year + 1,
-                                        12,
-                                        31,
-                                        23,
-                                        59), onConfirm: (date) {
+                                        DateTime.now().year + 1, 12, 31, 23, 59),
+                                    onConfirm: (date) {
                                   setState(() {
                                     deadline = date;
                                   });
                                 }, currentTime: DateTime.now());
-                              },
-                              child: Text(
-                                "Choose a deadline",
-                                style: TextStyle(color: Colors.blue),
-                              )),
-                          Text(deadline == null ? "" : formattedDate(deadline))
-                        ],
+                              }
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.orangeAccent.withOpacity(0.27),
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: Icon(
+                                Icons.date_range,
+                                color: Colors.orange,
+                                size: 32,
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            Text(
+                              deadline == null ? "" : formattedDate(deadline),
+                              style: TextStyle(fontSize: 18),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.red.withOpacity(0.27),
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: Icon(
+                                Icons.access_time,
+                                color: Colors.red,
+                                size: 32,
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            Text(
+                              deadline == null ? "" : "${fs(deadline.hour)}:${fs(deadline.minute)}",
+                              style: TextStyle(fontSize: 18),
+                            )
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -152,7 +200,7 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
   }
 
   buildCourseList(context, courses) {
-    if(courses.isEmpty){
+    if (courses.isEmpty) {
       return Text("No Courses Added");
     }
     return SizedBox(
@@ -200,3 +248,13 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
     );
   }
 }
+
+const Map days = {
+  1: "Monday",
+  2: "Tuesday",
+  3: "Wednesday",
+  4: "Thursday",
+  5: "Friday",
+  6: "Saturday",
+  7: "Sunday"
+};

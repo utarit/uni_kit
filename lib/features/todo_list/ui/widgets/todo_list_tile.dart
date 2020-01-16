@@ -3,8 +3,21 @@ import 'package:uni_kit/core/utils/common_functions.dart';
 import 'package:uni_kit/features/todo_list/data/models/deadline.dart';
 
 class TodoListTile extends StatelessWidget {
-  Deadline deadline;
+  final Deadline deadline;
   TodoListTile(this.deadline);
+
+  chooseTileColor(DateTime deadline) {
+    final now = DateTime.now();
+    if (deadline.isBefore(now)) {
+      return Colors.grey;
+    } else if (deadline.difference(now) < Duration(days: 1)) {
+      return Colors.red;
+    } else if (deadline.difference(now) < Duration(days: 7)) {
+      return Colors.orange;
+    } else {
+      return Colors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +25,40 @@ class TodoListTile extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.all(12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            child: Text(deadline.description, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  deadline.description,
+                  style: TextStyle(
+                    fontSize: 16,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Container(
+                child: Text(
+                  "#" + deadline.course.acronym,
+                  style: TextStyle(
+                      color: Color(deadline.course.color),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13),
+                ),
+              )
+            ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
