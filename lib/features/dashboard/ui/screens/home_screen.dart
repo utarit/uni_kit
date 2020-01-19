@@ -36,16 +36,22 @@ class HomeScreen extends StatelessWidget {
   }
 
   _screenSelection(index, context) {
-    Function navigation;
+    Future navigation;
     switch (index) {
       case 0:
         navigation = null;
         break;
       case 1:
-        navigation = (context) => MedicoDetailsScreen();
+        navigation = Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MedicoDetailsScreen()),
+        );
         break;
       case 2:
-        navigation = (context) => RingDetailsScreen();
+        navigation = Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RingDetailsScreen()),
+        );
         break;
       case 3:
         navigation = null;
@@ -102,11 +108,7 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: _screenSelection(index, context)),
-                    );
+                    _screenSelection(index, context);
                   },
                   child: Container(
                     padding: EdgeInsets.all(16.0),

@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:uni_kit/core/providers/providers.dart';
 import 'package:uni_kit/features/course_schedule/data/models/course.dart';
 import 'package:uni_kit/features/dashboard/ui/screens/navigation_screen.dart';
-import 'package:uni_kit/features/todo_list/data/models/deadline.dart';
+import 'package:uni_kit/features/todo_list/data/models/todo.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:uni_kit/features/todo_list/data/models/todo_tag.dart';
 
 
 void main() async {
@@ -13,9 +14,10 @@ void main() async {
   final appDocumentDirectory =
       await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
-  Hive.registerAdapter(DeadlineAdapter(), 0);
+  Hive.registerAdapter(TodoAdapter(), 0);
   Hive.registerAdapter(CourseAdapter(), 1);
   Hive.registerAdapter(CourseTimeAdapter(), 2);
+  Hive.registerAdapter(TodoTagAdapter(), 3);
   runApp(MyApp());
 }
 

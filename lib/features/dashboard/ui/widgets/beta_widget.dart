@@ -7,21 +7,21 @@ class BetaWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "v.1.0.15\n",
+          "v.1.0.18\n",
           style: TextStyle(color: Colors.white),
         ),
         Text(
 """
-    ( (            
-    ) )       
-  ........   
-  |       |])   
-  \\      /  
-   `----'    
+         /\\_/\\  /\\
+        / o o \\ \\ \\
+       /   Y   \\/ /
+      /         \\/
+      \\ | | | | /
+       `|_|-|_|'
+       
+Happy Holiday...
 
-Good Luck with Finals...
-
-(Checkout Ring Page by clicking the ring tile.)   
+Notifications are back and testing! Deadlines transforms into Todos.
 """,
           style: TextStyle(color: Colors.white, letterSpacing: 3),
         ),

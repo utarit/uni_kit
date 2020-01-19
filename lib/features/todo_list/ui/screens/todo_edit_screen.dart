@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_kit/core/utils/common_functions.dart';
-import 'package:uni_kit/features/course_schedule/data/models/course.dart';
-import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
-import 'package:uni_kit/features/todo_list/data/models/deadline.dart';
+import 'package:uni_kit/features/todo_list/data/models/todo.dart';
+import 'package:uni_kit/features/todo_list/data/models/todo_tag.dart';
 import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
+import 'package:uni_kit/features/todo_list/domain/providers/todo_tag_provider.dart';
 
-class DeadlineEditScreen extends StatefulWidget {
+class TodoEditScreen extends StatefulWidget {
   @override
-  _DeadlineEditScreenState createState() => _DeadlineEditScreenState();
+  _TodoEditScreenState createState() => _TodoEditScreenState();
 }
 
-class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
+class _TodoEditScreenState extends State<TodoEditScreen> {
   final _formKey = GlobalKey<FormState>();
-  DateTime deadline;
+  DateTime todo;
   final descriptionController = TextEditingController();
-  int _selectedCourseIndex;
+  List<TodoTag> selectedTagList;
 
   String fs(int n) => n < 9 ? "0$n" : "$n";
   String formattedDate(DateTime date) =>
@@ -25,14 +25,15 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
   @override
   void initState() {
     super.initState();
-    deadline = DateTime.now();
-    _selectedCourseIndex = 0;
+    todo = DateTime.now();
+    selectedTagList = [];
   }
 
   @override
   Widget build(BuildContext context) {
-    var deadlineProvider = Provider.of<TodoProvider>(context, listen: false);
-    var courses = Provider.of<CourseProvider>(context, listen: false).courses;
+    var todoProvider = Provider.of<TodoProvider>(context, listen: false);
+    var todoTags =
+        Provider.of<TodoTagProvider>(context, listen: false).todoTags;
 
     return Scaffold(
       appBar: AppBar(
@@ -44,17 +45,16 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
               size: 30,
             ),
             onPressed: () {
-              // Validate returns true if the form is valid, or false
-              // otherwise.
               if (_formKey.currentState.validate()) {
-                int key = DateTime.now().millisecondsSinceEpoch % UPPER_LIMIT;
-                Deadline result = Deadline(
-                    course: courses[_selectedCourseIndex] ??
-                        Course(acronym: "OTHER"),
-                    description: descriptionController.text,
-                    endTime: deadline,
-                    key: key);
-                deadlineProvider.editDeadline(key, result);
+                Key key = UniqueKey();
+                selectedTagList.sort((a, b) => a.label.compareTo(b.label));
+                Todo result = Todo(
+                  tags: selectedTagList,
+                  description: descriptionController.text,
+                  endTime: todo,
+                  key: key.hashCode,
+                );
+                todoProvider.editTodo(key.hashCode, result);
                 Future.delayed(const Duration(milliseconds: 100), () {
                   Navigator.pop(context);
                 });
@@ -85,7 +85,7 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
               color: Colors.black),
         ),
       ),
-      body: courses != null
+      body: todoTags != null
           ? Form(
               key: _formKey,
               child: Padding(
@@ -94,7 +94,7 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      buildCourseList(context, courses),
+                      buildCourseList(context, todoTags),
                       SizedBox(
                         height: 16.0,
                       ),
@@ -125,22 +125,21 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: RaisedButton(
-                          child: Container(
-                            child: Text("Set Time"),
-                          ),
-                          onPressed: () {
-                                DatePicker.showDateTimePicker(context,
-                                    showTitleActions: true,
-                                    minTime: DateTime.now(),
-                                    maxTime: DateTime.utc(
-                                        DateTime.now().year + 1, 12, 31, 23, 59),
-                                    onConfirm: (date) {
-                                  setState(() {
-                                    deadline = date;
-                                  });
-                                }, currentTime: DateTime.now());
-                              }
-                        ),
+                            child: Container(
+                              child: Text("Set Time"),
+                            ),
+                            onPressed: () {
+                              DatePicker.showDateTimePicker(context,
+                                  showTitleActions: true,
+                                  minTime: DateTime.now(),
+                                  maxTime: DateTime.utc(
+                                      DateTime.now().year + 1, 12, 31, 23, 59),
+                                  onConfirm: (date) {
+                                setState(() {
+                                  todo = date;
+                                });
+                              }, currentTime: DateTime.now());
+                            }),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -158,9 +157,11 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                                 size: 32,
                               ),
                             ),
-                            SizedBox(width: 10,),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Text(
-                              deadline == null ? "" : formattedDate(deadline),
+                              todo == null ? "" : formattedDate(todo),
                               style: TextStyle(fontSize: 18),
                             )
                           ],
@@ -182,9 +183,13 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
                                 size: 32,
                               ),
                             ),
-                            SizedBox(width: 10,),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Text(
-                              deadline == null ? "" : "${fs(deadline.hour)}:${fs(deadline.minute)}",
+                              todo == null
+                                  ? ""
+                                  : "${fs(todo.hour)}:${fs(todo.minute)}",
                               style: TextStyle(fontSize: 18),
                             )
                           ],
@@ -199,42 +204,49 @@ class _DeadlineEditScreenState extends State<DeadlineEditScreen> {
     );
   }
 
-  buildCourseList(context, courses) {
-    if (courses.isEmpty) {
-      return Text("No Courses Added");
+  buildCourseList(context, List<TodoTag> tags) {
+    if (tags == null || tags.isEmpty) {
+      return Text("No Tags Added");
     }
     return SizedBox(
       height: 60,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: courses.length,
+        itemCount: tags.length,
         itemBuilder: (context, index) {
-          final course = courses[index];
+          final tag = tags[index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  _selectedCourseIndex = index;
+                  if (!selectedTagList.contains(tag)) {
+                    selectedTagList.add(tag);
+                  } else {
+                    selectedTagList.remove(tag);
+                  }
                 });
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: Container(
                     padding: EdgeInsets.all(12.0),
-                    color: index == _selectedCourseIndex
-                        ? Color(course.color)
-                        : Color(course.color).withOpacity(0.5),
+                    color: selectedTagList.contains(tag)
+                        ? Color(tag.colorValue)
+                        : Color(tag.colorValue).withOpacity(0.5),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Icon(
-                          Icons.assignment,
-                          color: Colors.white,
+                        Text(
+                          "#",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
                         ),
                         SizedBox(width: 8),
                         Text(
-                          "${course.acronym}",
+                          "${tag.label}",
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         )

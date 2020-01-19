@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:uni_kit/core/utils/common_functions.dart';
-import 'package:uni_kit/features/todo_list/data/models/deadline.dart';
+import 'package:uni_kit/features/todo_list/data/models/todo.dart';
 
 class TodoListTile extends StatelessWidget {
-  final Deadline deadline;
-  TodoListTile(this.deadline);
+  final Todo todo;
+  TodoListTile(this.todo);
 
-  chooseTileColor(DateTime deadline) {
+  chooseTileColor(DateTime todo) {
     final now = DateTime.now();
-    if (deadline.isBefore(now)) {
+    if (todo.isBefore(now)) {
       return Colors.grey;
-    } else if (deadline.difference(now) < Duration(days: 1)) {
+    } else if (todo.difference(now) < Duration(days: 1)) {
       return Colors.red;
-    } else if (deadline.difference(now) < Duration(days: 7)) {
+    } else if (todo.difference(now) < Duration(days: 7)) {
       return Colors.orange;
     } else {
       return Colors.green;
@@ -21,7 +21,7 @@ class TodoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var t = deadline.endTime;
+    var t = todo.endTime;
 
     return Container(
       margin: const EdgeInsets.all(8.0),
@@ -32,28 +32,40 @@ class TodoListTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          if(todo.tags.length > 0)
+          SizedBox(
+            height: 16,
+            child: ListView.builder(
+              reverse: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: todo.tags.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  child: Text(
+                    " #" + todo.tags[index].label,
+                    style: TextStyle(
+                      color: Color(todo.tags[index].colorValue),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
                 child: Text(
-                  deadline.description,
+                  todo.description,
                   style: TextStyle(
                     fontSize: 16,
                     // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              Container(
-                child: Text(
-                  "#" + deadline.course.acronym,
-                  style: TextStyle(
-                      color: Color(deadline.course.color),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13),
-                ),
-              )
             ],
           ),
           SizedBox(
@@ -62,59 +74,42 @@ class TodoListTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              Text(
+                _differenceDuration(t),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                ),
+              ),
               Container(
                 child: Text(
-                  "${t.day} ${months[t.month]} ${t.year} ",
+                  "${t.day} ${months[t.month]} ${t.year} | ${formattedNum(t.hour)}.${formattedNum(t.minute)}",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
                   ),
                 ),
               ),
-              Container(
-                child: Text(
-                  "${formattedNum(t.hour)}.${formattedNum(t.minute)}",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
-              )
             ],
           )
         ],
       ),
     );
-    // return ListTile(
-    //   title: Text(deadline.course.acronym),
-    //   subtitle: Text(deadline.description),
-    //   trailing: Container(
-    //     decoration: BoxDecoration(
-    //       color: Colors.white,
-    //       borderRadius: BorderRadius.circular(10),
-    //     ),
-    //     padding: EdgeInsets.all(8.0),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: <Widget>[
-    // Text(
-    //   "${t.day} ${months[t.month]}",
-    //   style: TextStyle(
-    //       //color: chooseTileColor(deadline.endTime),
-    //       fontSize: 16,
-    //       fontWeight: FontWeight.bold),
-    // ),
-    // Text(
-    //   "${formattedNum(t.hour)}:${formattedNum(t.minute)}",
-    //   style: TextStyle(
-    //       //color: chooseTileColor(deadline.endTime),
-    //       fontSize: 16,
-    //       fontWeight: FontWeight.bold),
-    // ),
-    //       ],
-    //     ),
-    //   ),
-    // );
+  }
+
+  String _differenceDuration(DateTime t) {
+    var now = DateTime.now();
+    if (t.isBefore(now)) {
+      return "Deadline passed";
+    }
+
+    Duration duration = t.difference(now);
+    if (duration > Duration(days: 1)) {
+      return "${duration.inDays} days left";
+    } else if (duration > Duration(hours: 1)) {
+      return "${duration.inHours} hours left";
+    } else {
+      return "It's almost come!";
+    }
   }
 }

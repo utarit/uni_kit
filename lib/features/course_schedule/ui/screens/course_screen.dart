@@ -4,7 +4,6 @@ import 'package:uni_kit/core/utils/common_functions.dart';
 import 'package:uni_kit/features/course_schedule/data/models/course.dart';
 import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
 import 'package:uni_kit/features/course_schedule/ui/screens/course_edit_screen.dart';
-import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
 
 class CourseScreen extends StatefulWidget {
   final Course course;
@@ -16,7 +15,7 @@ class CourseScreen extends StatefulWidget {
 class _CourseScreenState extends State<CourseScreen>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  bool showDeadlines = false;
+  bool showTodos = false;
 
   @override
   void initState() {
@@ -178,13 +177,13 @@ class _CourseScreenState extends State<CourseScreen>
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Deadlines", style: TextStyle(fontSize: 20)),
-            ),
-            Column(
-              children: buildList(),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Text("Todos", style: TextStyle(fontSize: 20)),
+            // ),
+            // Column(
+            //   children: buildList(),
+            // ),
             FlatButton(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,8 +196,8 @@ class _CourseScreenState extends State<CourseScreen>
                 ],
               ),
               onPressed: () {
-                showDeadlines = !showDeadlines;
-                if (showDeadlines) {
+                showTodos = !showTodos;
+                if (showTodos) {
                   _controller.forward();
                 } else {
                   _controller.reverse();
@@ -228,20 +227,20 @@ class _CourseScreenState extends State<CourseScreen>
     );
   }
 
-  List<Widget> buildList() {
-    final deadlines = Provider.of<TodoProvider>(context)
-        .deadlines
-        .where((deadline) => deadline.course.acronym == widget.course.acronym)
-        .toList();
-    List<Widget> widgetList = deadlines
-        .map((deadline) => ListTile(
-              title: Text(deadline.course.acronym),
-              subtitle: Text(deadline.description),
-              trailing: Text(
-                  "${formattedNum(deadline.endTime.day)}/${formattedNum(deadline.endTime.month)} ${formattedNum(deadline.endTime.hour)}:${formattedNum(deadline.endTime.minute)}"),
-            ))
-        .toList();
+  // List<Widget> buildList() {
+  //   final todos = Provider.of<TodoProvider>(context)
+  //       .todos
+  //       .where((todo) => todo.course.acronym == widget.course.acronym)
+  //       .toList();
+  //   List<Widget> widgetList = todos
+  //       .map((todo) => ListTile(
+  //             title: Text(todo.course.acronym),
+  //             subtitle: Text(todo.description),
+  //             trailing: Text(
+  //                 "${formattedNum(todo.endTime.day)}/${formattedNum(todo.endTime.month)} ${formattedNum(todo.endTime.hour)}:${formattedNum(todo.endTime.minute)}"),
+  //           ))
+  //       .toList();
 
-    return widgetList;
-  }
+  //   return widgetList;
+  // }
 }

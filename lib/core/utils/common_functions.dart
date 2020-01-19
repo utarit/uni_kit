@@ -16,7 +16,7 @@ String capitalizeFirstLetter(String str) {
 }
 
 int totalMin(int hour, int min) => hour * 60 + min;
-const int UPPER_LIMIT = 4294967295;
+const int UPPER_LIMIT = 2147483648;
 const List<String> months = [
   "",
   "Jan",
