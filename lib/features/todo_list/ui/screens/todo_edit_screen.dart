@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:uni_kit/core/providers/notification_provider.dart';
 import 'package:uni_kit/core/utils/common_functions.dart';
 import 'package:uni_kit/features/todo_list/data/models/todo.dart';
 import 'package:uni_kit/features/todo_list/data/models/todo_tag.dart';
@@ -55,6 +56,11 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
                   key: key.hashCode,
                 );
                 todoProvider.editTodo(key.hashCode, result);
+                if (DateTime.now()
+                    .isBefore(result.endTime.subtract(Duration(days: 1)))) {
+                  Provider.of<NotificationProvider>(context, listen: false)
+                      .scheduleTodoNotification(result);
+                }
                 Future.delayed(const Duration(milliseconds: 100), () {
                   Navigator.pop(context);
                 });

@@ -17,5 +17,6 @@ class TodoTag {
     return label;
   }
 
-  bool operator==(dynamic rhs) => label == rhs.label;
+  bool operator==(rhs) => rhs is TodoTag && label == rhs.label;
+  int get hashCode => hashCode;
 }
