@@ -16,6 +16,7 @@ class _TodoScreenState extends State<TodoScreen> {
   TodoTag todoFilter;
   String newTag;
   int _selectedColor = 0;
+  String errorMessage = "";
 
   final courseColors = [
     Colors.red.value,
@@ -206,11 +207,13 @@ class _TodoScreenState extends State<TodoScreen> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () async {
-                await Provider.of<TodoTagProvider>(context).deleteTodoTag(tag.label);
-                Provider.of<TodoProvider>(context).todos.forEach((todo){
+                await Provider.of<TodoTagProvider>(context)
+                    .deleteTodoTag(tag.label);
+                Provider.of<TodoProvider>(context).todos.forEach((todo) {
                   todo.tags.remove(tag);
                 });
-                Provider.of<TodoProvider>(context).editTodoMultiple(Provider.of<TodoProvider>(context).todos);
+                Provider.of<TodoProvider>(context)
+                    .editTodoMultiple(Provider.of<TodoProvider>(context).todos);
                 setState(() {
                   todoFilter = TodoTag("ALL", Colors.white.value);
                 });
@@ -228,6 +231,11 @@ class _TodoScreenState extends State<TodoScreen> {
   Widget buildCourseTile(context, TodoTag tag) => GestureDetector(
         onTap: () {
           if (tag.label == "+") {
+            setState(() {
+              newTag = "";
+              _selectedColor = 0;
+              errorMessage = "";
+            });
             showNewTagSheet(context);
           } else {
             if (todoFilter != tag) {
@@ -237,11 +245,10 @@ class _TodoScreenState extends State<TodoScreen> {
             }
           }
         },
-        onLongPress: (){
-          if(tag.label != "ALL" && tag.label != "+"){
+        onLongPress: () {
+          if (tag.label != "ALL" && tag.label != "+") {
             _showDialog(tag);
           }
-          
         },
         child: Stack(
           alignment: Alignment.center,
@@ -297,14 +304,14 @@ class _TodoScreenState extends State<TodoScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       textCapitalization: TextCapitalization.words,
-                      onChanged: (str){
+                      onChanged: (str) {
                         setState(() {
                           newTag = str;
                         });
                       },
                       decoration: InputDecoration(
                         hintStyle: TextStyle(fontSize: 17),
-                        hintText: 'Label (cannot be empty)',
+                        hintText: 'Label',
                         // suffixIcon: Icon(Icons.search),
                         // border: InputBorder(borderSide: ),
                         contentPadding: EdgeInsets.all(20),
@@ -329,8 +336,7 @@ class _TodoScreenState extends State<TodoScreen> {
                             width: 60,
                             decoration: BoxDecoration(
                               border: _selectedColor == index
-                                  ? Border.all(
-                                      color: Colors.black, width: 2)
+                                  ? Border.all(color: Colors.black, width: 2)
                                   : Border.all(width: 0),
                               borderRadius: BorderRadius.circular(12),
                               color: Color(courseColors[index]),
@@ -340,14 +346,26 @@ class _TodoScreenState extends State<TodoScreen> {
                       },
                     ),
                   ),
+                  Text(errorMessage),
                   FlatButton(
                     onPressed: () {
-                      if(newTag != null){
-                        var tag = TodoTag(newTag, courseColors[_selectedColor]);
-                        Provider.of<TodoTagProvider>(context, listen: false).editTodoTag(newTag, tag);
-                        Navigator.pop(context);
+                      if (newTag == null || newTag.isEmpty) {
+                        setState(() {
+                          errorMessage = "Label cannot be empty!";
+                        });
+                      } else if (RegExp(r'[^\x00-\x7F]').hasMatch(newTag)) {
+                        setState(() {
+                          errorMessage =
+                              "Please do not use turkish charachters.";
+                        });
                       } else {
-
+                        // newTag = newTag.replaceAll(RegExp(r'[^\x00-\x7F]'), "");
+                        // errorMessage = "";
+                        var tag = TodoTag(newTag, courseColors[_selectedColor]);
+                        // print(newTag);
+                        Provider.of<TodoTagProvider>(context, listen: false)
+                            .editTodoTag(newTag, tag);
+                        Navigator.pop(context);
                       }
                     },
                     child: Container(

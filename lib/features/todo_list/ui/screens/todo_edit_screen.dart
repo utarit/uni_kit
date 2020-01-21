@@ -57,7 +57,7 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
                 );
                 todoProvider.editTodo(key.hashCode, result);
                 if (DateTime.now()
-                    .isBefore(result.endTime.subtract(Duration(days: 1)))) {
+                    .isBefore(result.endTime.subtract(NotificationProvider.defaultDuration))) {
                   Provider.of<NotificationProvider>(context, listen: false)
                       .scheduleTodoNotification(result);
                 }

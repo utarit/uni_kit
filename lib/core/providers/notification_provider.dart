@@ -1,13 +1,17 @@
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:uni_kit/features/todo_list/data/models/todo.dart';
 
 class NotificationProvider {
+  static const defaultDuration = Duration(minutes: 30);
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   initializeNotificationPlugin() {
     var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('app_icon');
     var initializationSettingsIOS =
         IOSInitializationSettings(onDidReceiveLocalNotification: null);
     var initializationSettings = InitializationSettings(
@@ -19,16 +23,32 @@ class NotificationProvider {
   scheduleTodoNotification(Todo todo) async {
     // print("Hello");
     var scheduledNotificationDateTime =
-        todo.endTime.subtract(Duration(days: 1));
+        todo.endTime.subtract(defaultDuration);
+    var vibrationPattern = Int64List(4);
+    vibrationPattern[0] = 0;
+    vibrationPattern[1] = 1000;
+    vibrationPattern[2] = 5000;
+    vibrationPattern[3] = 2000;
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'com.maks.metu_buddy', 'UniKit', 'University Kit for OTTÜ Students');
+        'com.maks.metu_buddy', 'UniKit', 'University Kit for OTTÜ Students',
+        //icon: 'secondary_icon',
+        sound: 'slow_spring_board',
+        largeIcon: 'sample_large_icon',
+        largeIconBitmapSource: BitmapSource.Drawable,
+        vibrationPattern: vibrationPattern,
+        enableLights: true,
+        color: const Color(0xFFFF0000),
+        ledColor: const Color(0xFFFF0000),
+        ledOnMs: 1000,
+        ledOffMs: 500,
+        );
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     NotificationDetails platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.schedule(
       todo.key,
-      '24 saatten az kaldı!',
+      '30 dakika kaldı!',
       todo.description,
       scheduledNotificationDateTime,
       platformChannelSpecifics,

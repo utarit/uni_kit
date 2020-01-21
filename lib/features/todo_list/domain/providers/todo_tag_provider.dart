@@ -39,7 +39,7 @@ class TodoTagProvider extends ChangeNotifier {
 
   void editTodoTag(String label, TodoTag todo) async {
     var box = await Hive.openBox<TodoTag>(todoTagBoxName);
-
+    print(label);
     // Add a contact to our box
     await box.put(label, todo);
 

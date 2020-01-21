@@ -1,7 +1,7 @@
 name: uni_kit
 description: Emergency Kit for hocams
 
-version: 1.0.19+19
+version: 1.0.20+20
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
