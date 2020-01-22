@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:uni_kit/features/course_schedule/data/models/course.dart';
+import 'package:uni_kit/features/course_schedule/domain/providers/resources/doldur_xyz_integration.dart';
 
 class CourseProvider extends ChangeNotifier {
   static const courseBoxName = "courses";
@@ -38,6 +39,18 @@ class CourseProvider extends ChangeNotifier {
     closeBox();
     // Update UI
     notifyListeners();
+  }
+
+  void fetchCoursesFromDoldurXyz(String username) async {
+    var box = await Hive.openBox<Course>(courseBoxName);
+    await box.clear();
+    List<Course> courseList = await fetchDoldurXyzData(username);
+    for (var course in courseList) {
+      box.put(course.acronym, course); //await?
+    }
+
+    courses = box.values.toList();
+    closeBox();
   }
 
   void editCourse(String courseAcronym, Course course) async {

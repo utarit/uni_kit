@@ -250,44 +250,46 @@ class _TodoScreenState extends State<TodoScreen> {
             _showDialog(tag);
           }
         },
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.width * 1 / 5 - 30,
-              width: MediaQuery.of(context).size.width * 1 / 5 - 30,
-              padding: const EdgeInsets.all(4),
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                color: Color(0xff3A3B40),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [BoxShadow(offset: Offset.fromDirection(3.14 / 2))],
-                // border: Border.all(width: todoFilter == filter ? 1 : 0),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                tag.label[0].toUpperCase(),
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color(
-                    tag.colorValue,
+        child: InkWell(
+                  child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.width * 1 / 5 - 30,
+                width: MediaQuery.of(context).size.width * 1 / 5 - 30,
+                padding: const EdgeInsets.all(4),
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: Color(0xff3A3B40),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [BoxShadow(offset: Offset.fromDirection(3.14 / 2))],
+                  // border: Border.all(width: todoFilter == filter ? 1 : 0),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  tag.label[0].toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(
+                      tag.colorValue,
+                    ),
+                    fontWeight: FontWeight.bold,
                   ),
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            todoFilter == tag
-                ? Positioned(
-                    right: 5,
-                    top: 13,
-                    child: CircleAvatar(
-                      radius: 4,
-                      child: Container(),
-                      backgroundColor: Color(tag.colorValue),
-                    ),
-                  )
-                : SizedBox.shrink()
-          ],
+              todoFilter == tag
+                  ? Positioned(
+                      right: 5,
+                      top: 13,
+                      child: CircleAvatar(
+                        radius: 4,
+                        child: Container(),
+                        backgroundColor: Color(tag.colorValue),
+                      ),
+                    )
+                  : SizedBox.shrink()
+            ],
+          ),
         ),
       );
 
