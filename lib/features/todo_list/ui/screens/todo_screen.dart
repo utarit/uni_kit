@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uni_kit/core/utils/common_functions.dart';
 import 'package:uni_kit/features/todo_list/data/models/todo.dart';
 import 'package:uni_kit/features/todo_list/data/models/todo_tag.dart';
 import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
@@ -18,17 +19,6 @@ class _TodoScreenState extends State<TodoScreen> {
   int _selectedColor = 0;
   String errorMessage = "";
 
-  final courseColors = [
-    Colors.red.value,
-    Colors.purple.value,
-    Colors.pink.value,
-    Colors.blue.value,
-    Colors.green.value,
-    Colors.orange.value,
-    Colors.cyan.value,
-    Colors.indigo.value,
-    Colors.lime.value
-  ];
 
   final Map<String, Color> colorList = {
     "lastDay": Colors.red,
@@ -209,11 +199,11 @@ class _TodoScreenState extends State<TodoScreen> {
               onPressed: () async {
                 await Provider.of<TodoTagProvider>(context)
                     .deleteTodoTag(tag.label);
-                Provider.of<TodoProvider>(context).todos.forEach((todo) {
+                Provider.of<TodoProvider>(context, listen: false).todos.forEach((todo) {
                   todo.tags.remove(tag);
                 });
-                Provider.of<TodoProvider>(context)
-                    .editTodoMultiple(Provider.of<TodoProvider>(context).todos);
+                Provider.of<TodoProvider>(context, listen: false)
+                    .editTodoMultiple(Provider.of<TodoProvider>(context, listen: false).todos);
                 setState(() {
                   todoFilter = TodoTag("ALL", Colors.white.value);
                 });
@@ -324,7 +314,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     height: 40,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: courseColors.length,
+                      itemCount: colorPalette.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           // padding: EdgeInsets.all(0),
@@ -341,7 +331,7 @@ class _TodoScreenState extends State<TodoScreen> {
                                   ? Border.all(color: Colors.black, width: 2)
                                   : Border.all(width: 0),
                               borderRadius: BorderRadius.circular(12),
-                              color: Color(courseColors[index]),
+                              color: Color(colorPalette[index]),
                             ),
                           ),
                         );
@@ -363,7 +353,7 @@ class _TodoScreenState extends State<TodoScreen> {
                       } else {
                         // newTag = newTag.replaceAll(RegExp(r'[^\x00-\x7F]'), "");
                         // errorMessage = "";
-                        var tag = TodoTag(newTag, courseColors[_selectedColor]);
+                        var tag = TodoTag(newTag, colorPalette[_selectedColor]);
                         // print(newTag);
                         Provider.of<TodoTagProvider>(context, listen: false)
                             .editTodoTag(newTag, tag);

@@ -23,7 +23,7 @@ Future<List<Course>> fetchDoldurXyzData(String username) async {
         } else {
           var color = '0xFF' + child.attributes['style'].split('#')[1];
           // print(color);
-          courseDict[name] = Course(acronym: name, fullName: '-', hours: [CourseTime(day: j, hour: i)], syllabus: [], color: int.parse(color));
+          courseDict[name] = Course(acronym: name, fullName: '', hours: [CourseTime(day: j, hour: i)], syllabus: List.generate(14, (i) => "-").toList(), color: int.parse(color));
         }
       }
     }

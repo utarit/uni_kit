@@ -41,7 +41,7 @@ class CourseProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void fetchCoursesFromDoldurXyz(String username) async {
+  Future<void> fetchCoursesFromDoldurXyz(String username) async {
     var box = await Hive.openBox<Course>(courseBoxName);
     await box.clear();
     List<Course> courseList = await fetchDoldurXyzData(username);
@@ -50,6 +50,7 @@ class CourseProvider extends ChangeNotifier {
     }
 
     courses = box.values.toList();
+    notifyListeners();
     closeBox();
   }
 

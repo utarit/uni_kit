@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 String formattedNum(int number) => number < 10 ? "0$number" : "$number";
 DateTime schoolStarted = DateTime.now().isBefore(DateTime.utc(2020, 2, 3))
     ? DateTime.utc(2019, 9, 23)
@@ -31,6 +33,18 @@ const List<String> months = [
   "Oct",
   "Nov",
   "Dec"
+];
+
+var colorPalette = [
+  Colors.red.value,
+  Colors.purple.value,
+  Colors.pink.value,
+  Colors.blue.value,
+  Colors.green.value,
+  Colors.orange.value,
+  Colors.cyan.value,
+  Colors.indigo.value,
+  Colors.lime.value
 ];
 
 List<GroupModel> days = [

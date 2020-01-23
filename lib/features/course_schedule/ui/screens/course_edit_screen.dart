@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uni_kit/core/utils/common_functions.dart';
 import 'package:uni_kit/features/course_schedule/data/models/course.dart';
 import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
 
@@ -19,17 +20,6 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
   List<CourseTime> lessonHours;
   int _selectedColor = 0;
 
-  final courseColors = [
-    Colors.red.value,
-    Colors.purple.value,
-    Colors.pink.value,
-    Colors.blue.value,
-    Colors.green.value,
-    Colors.orange.value,
-    Colors.cyan.value,
-    Colors.indigo.value,
-    Colors.lime.value
-  ];
 
   @override
   void initState() {
@@ -45,8 +35,8 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
         syllabusControllerList
             .add(TextEditingController(text: widget.course?.syllabus[i] ?? ""));
       }
-      for (int i = 0; i < courseColors.length; i++) {
-        if (widget.course.color == courseColors[i]) {
+      for (int i = 0; i < colorPalette.length; i++) {
+        if (widget.course.color == colorPalette[i]) {
           setState(() {
             _selectedColor = i;
           });
@@ -158,7 +148,7 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
                     height: 75,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: courseColors.length,
+                      itemCount: colorPalette.length,
                       itemBuilder: (context, index) {
                         return FlatButton(
                           padding: EdgeInsets.all(0),
@@ -175,7 +165,7 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
                                   ? Border.all(color: Colors.black, width: 2)
                                   : Border.all(width: 0),
                               borderRadius: BorderRadius.circular(12),
-                              color: Color(courseColors[index]),
+                              color: Color(colorPalette[index]),
                             ),
                           ),
                         );
@@ -258,7 +248,7 @@ class _CourseEditScreenState extends State<CourseEditScreen> {
           fullName: courseNameController.text,
           hours: lessonHours,
           //key: widget.course?.key ?? DateTime.now().millisecondsSinceEpoch % UPPER_LIMIT,
-          color: courseColors[_selectedColor],
+          color: colorPalette[_selectedColor],
           syllabus: syllabusControllerList
               .map((f) => f.text.isEmpty ? "-" : f.text)
               .toList());
