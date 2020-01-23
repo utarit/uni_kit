@@ -35,7 +35,7 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Todo Screen built");
+    // print("Todo Screen built");
 
     return Row(
       // mainAxisSize: MainAxisSize.min,
@@ -197,7 +197,7 @@ class _TodoScreenState extends State<TodoScreen> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () async {
-                await Provider.of<TodoTagProvider>(context)
+                await Provider.of<TodoTagProvider>(context, listen: false)
                     .deleteTodoTag(tag.label);
                 Provider.of<TodoProvider>(context, listen: false).todos.forEach((todo) {
                   todo.tags.remove(tag);

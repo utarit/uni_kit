@@ -8,7 +8,7 @@ import 'package:uni_kit/features/course_schedule/ui/screens/course_screen.dart';
 class CourseListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("CourseList built");
+    // print("CourseList built");
 
     return Selector<CourseProvider, List<Course>>(
       selector: (context, courseProvider) => courseProvider.courses,

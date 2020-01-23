@@ -227,20 +227,4 @@ class _CourseScreenState extends State<CourseScreen>
     );
   }
 
-  // List<Widget> buildList() {
-  //   final todos = Provider.of<TodoProvider>(context)
-  //       .todos
-  //       .where((todo) => todo.course.acronym == widget.course.acronym)
-  //       .toList();
-  //   List<Widget> widgetList = todos
-  //       .map((todo) => ListTile(
-  //             title: Text(todo.course.acronym),
-  //             subtitle: Text(todo.description),
-  //             trailing: Text(
-  //                 "${formattedNum(todo.endTime.day)}/${formattedNum(todo.endTime.month)} ${formattedNum(todo.endTime.hour)}:${formattedNum(todo.endTime.minute)}"),
-  //           ))
-  //       .toList();
-
-  //   return widgetList;
-  // }
 }

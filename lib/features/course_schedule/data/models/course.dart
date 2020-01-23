@@ -17,6 +17,9 @@ class Course {
   int color;
 
   Course({this.acronym, this.fullName, this.hours, this.syllabus, this.color});
+
+  bool operator==(rhs) => rhs is Course && acronym == rhs.acronym;
+  int get hashCode => hashCode;
 }
 
 @HiveType()

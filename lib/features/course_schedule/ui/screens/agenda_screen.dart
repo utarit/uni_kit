@@ -109,7 +109,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                "Agenda",
+                "Schedule",
                 style: TextStyle(
                     fontFamily: "Galano",
                     fontSize: 30,

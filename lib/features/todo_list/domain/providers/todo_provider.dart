@@ -7,7 +7,7 @@ class TodoProvider extends ChangeNotifier {
 
   List<Todo> todos = [];
 
-  Future<void> getTodos() async {
+  void getTodos() async {
     var box = await Hive.openBox<Todo>(todoBoxName);
 
     // Update our provider state data with a hive read, and refresh the ui

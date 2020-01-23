@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print("Home built");
+    print("Home built");
     return Column(
       children: <Widget>[
         Padding(

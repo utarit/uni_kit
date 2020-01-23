@@ -9,10 +9,11 @@ class CourseScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Table built");
+    // print("Table built");
 
     return Selector<CourseProvider, List<Course>>(
           selector: (context, courseProvider) =>  courseProvider.courses,
+          // shouldRebuild: (prev, next) => prev.length != next.length,
           builder: (context, courses, child) => Table(
           columnWidths: {0: FlexColumnWidth(0.7)},
           children: generateTable(courses)),
@@ -20,6 +21,7 @@ class CourseScheduleWidget extends StatelessWidget {
   }
 
   List<TableRow> generateTable(List<Course> courses) {
+    // print(courses);
     Program program = Program.empty();
     List<TableRow> programList = [
       TableRow(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_kit/core/providers/notification_provider.dart';
 import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
@@ -24,11 +23,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
     TodoScreen(),
   ];
 
-  @override
-  void dispose() {
-    Hive.close();
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -36,8 +30,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     Provider.of<NotificationProvider>(context, listen: false).initializeNotificationPlugin();
     Provider.of<CourseProvider>(context, listen: false).getCourses();
     Provider.of<TodoTagProvider>(context, listen: false).getTodoTags();
-    Provider.of<TodoProvider>(context, listen: false).getTodos().then((_) {
-    });
+    Provider.of<TodoProvider>(context, listen: false).getTodos();
   }
 
 
@@ -46,6 +39,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print("Navigator Screen Built");
+
     return Scaffold(
       body: IndexedStack(children: screenList, index: _selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -59,7 +54,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         currentIndex: _selectedIndex,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.view_agenda), title: Text("Agenda")),
+              icon: Icon(Icons.view_agenda), title: Text("Schedule")),
           BottomNavigationBarItem(
               icon: Icon(Icons.dashboard), title: Text("Dashboard")),
           BottomNavigationBarItem(
