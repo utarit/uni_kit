@@ -7,6 +7,7 @@ class Ring {
   final int day;
   List<TimeOfDay> schedule;
   List<String> stops;
+  String imageUrl;
 
   static TimeOfDay closestRing(index, availableRings) {
     DateTime timeNow = DateTime.now();
@@ -23,7 +24,7 @@ class Ring {
 
 
   Ring.fromSchedule(this.name, this.stops, TimeOfDay startTime,
-      TimeOfDay endTime, int step, this.day) {
+      TimeOfDay endTime, int step, this.day, this.imageUrl) {
     List<TimeOfDay> timeArr = [];
     TimeOfDay tmp = startTime;
     do {
@@ -39,7 +40,7 @@ class Ring {
   }
 
   Ring.weekendShift(this.name, this.stops, TimeOfDay startTime,
-      TimeOfDay endTime, int step, this.day) {
+      TimeOfDay endTime, int step, this.day, this.imageUrl) {
     List<TimeOfDay> timeArr = [];
     TimeOfDay tmp = startTime;
     do {

@@ -8,9 +8,9 @@ class RingDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: dashboardTiles[2]["color"],
+      // backgroundColor: dashboardTiles[2]["color"],
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: dashboardTiles[2]["color"],
           // elevation: 0,
           title: Text(
             "Ring Schedule",
@@ -34,15 +34,27 @@ class RingDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "${ring.name} - ${(ring.day == WeekDay.weekday) ? "Weekday" : "Weekend"}",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                "${ring.name} - ${(ring.day == WeekDay.weekday) ? "Weekday" : "Weekend"}",
+                style: TextStyle(
+                    // color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
+            Image.asset("assets/ring_routes/${ring.imageUrl}", width: MediaQuery.of(context).size.width, fit: BoxFit.fill),
             SizedBox(height: 4,),
-            _buildHours(context, ring)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("Departure: ${ring.stops.first}"),
+                Text("Arrival: ${ring.stops.last}"),
+              ],
+            ),
+            _buildHours(context, ring),
+            SizedBox(height: 8,)
           ],
         ));
   }

@@ -20,7 +20,7 @@ class MedicoDetailsScreen extends StatelessWidget {
     } else {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: dashboardTiles[1]["color"],
           // elevation: 0,
           title: Text(
             "Medico",
@@ -28,7 +28,7 @@ class MedicoDetailsScreen extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        backgroundColor: dashboardTiles[1]["color"],
+        // backgroundColor: dashboardTiles[1]["color"],
         body: SingleChildScrollView(
           child: Container(
             width: double.infinity,
@@ -47,11 +47,11 @@ class MedicoDetailsScreen extends StatelessWidget {
                           _writeCategory(index),
                           Text(
                             "${doctor.name}",
-                            style: TextStyle(color: Colors.white),
+                            // style: TextStyle(color: Colors.white),
                           ),
                           Text("${doctor.status}",
                               style: TextStyle(
-                                  color: Colors.white60, fontSize: 12))
+                                   fontSize: 12))
                         ],
                       ));
                 },
@@ -84,10 +84,10 @@ class MedicoDetailsScreen extends StatelessWidget {
       case 11:
         category = categories[5];
         break;
-      case 13:
+      case 12:
         category = categories[6];
         break;
-      case 15:
+      case 14:
         category = categories[7];
         break;
       case 16:
@@ -113,7 +113,7 @@ class MedicoDetailsScreen extends StatelessWidget {
       ),
       child: Text(category,
           style: TextStyle(
-            color: Colors.white,
+            // color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w900,
           )),
