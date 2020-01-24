@@ -74,9 +74,10 @@ class _CourseScreenState extends State<CourseScreen>
     Navigator.push(
       context,
       MaterialPageRoute(
+        settings: RouteSettings(name: 'CourseEditScreen'),
           builder: (context) => CourseEditScreen(
                 course: widget.course,
-              )),
+              ),),
     );
   }
 

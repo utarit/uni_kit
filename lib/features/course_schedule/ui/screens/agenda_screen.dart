@@ -17,7 +17,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
   _navigateEditScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CourseEditScreen()),
+      MaterialPageRoute(builder: (context) => CourseEditScreen(), settings: RouteSettings(name: 'CourseEditScreen'),),
     );
   }
 

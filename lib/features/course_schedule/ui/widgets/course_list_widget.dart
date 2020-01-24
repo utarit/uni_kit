@@ -24,6 +24,7 @@ class CourseListWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
+                  settings: RouteSettings(name: 'CourseScreen'),
                     builder: (context) => CourseScreen(
                           course: course,
                         )),

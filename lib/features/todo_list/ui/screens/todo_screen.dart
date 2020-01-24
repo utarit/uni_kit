@@ -393,7 +393,7 @@ class _TodoScreenState extends State<TodoScreen> {
   _navigateTodoEditScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TodoEditScreen()),
+      MaterialPageRoute(builder: (context) => TodoEditScreen(),settings: RouteSettings(name: 'TodoEditScreen'),),
     );
   }
 }

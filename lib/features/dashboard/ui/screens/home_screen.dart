@@ -44,13 +44,13 @@ class HomeScreen extends StatelessWidget {
       case 1:
         navigation = Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MedicoDetailsScreen()),
+          MaterialPageRoute(builder: (context) => MedicoDetailsScreen(),settings: RouteSettings(name: 'MedicoScreen'),),
         );
         break;
       case 2:
         navigation = Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => RingDetailsScreen()),
+          MaterialPageRoute(builder: (context) => RingDetailsScreen(),settings: RouteSettings(name: 'RingScreen'),),
         );
         break;
       case 3:

@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -25,6 +27,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+    static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -32,6 +37,7 @@ class MyApp extends StatelessWidget {
       providers: providers,
       child: MaterialApp(
         title: 'UniKit',
+        navigatorObservers: <NavigatorObserver>[observer],
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: "Roboto"),
         home: NavigationScreen(),
