@@ -21,9 +21,4 @@ List<dynamic> dashboardTiles = [
     "color": Colors.lightBlue[400],
     "icon": Icons.pool,
   },
-  {
-    "name": "For Beta Testers",
-    "color": Colors.purple,
-    "icon": Icons.whatshot,
-  },
 ];

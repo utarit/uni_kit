@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_kit/core/utils/common_functions.dart';
-import 'package:uni_kit/features/course_schedule/data/models/course.dart';
 import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
 import 'package:uni_kit/features/course_schedule/ui/screens/course_screen.dart';
 
 class CourseListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // print("CourseList built");
+    print("Built Course List");
+    var courses  = Provider.of<CourseProvider>(context).courses;
 
-    return Selector<CourseProvider, List<Course>>(
-      selector: (context, courseProvider) => courseProvider.courses,
-      builder: (context, courses, child) => ListView.builder(
+    return ListView.builder(
         itemCount: courses.length,
         itemBuilder: (BuildContext context, int index) {
           final course = courses[index];
@@ -63,7 +61,6 @@ class CourseListWidget extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
+      );
   }
 }

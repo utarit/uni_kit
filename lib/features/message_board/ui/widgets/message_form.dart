@@ -29,7 +29,7 @@ class _MessageFormState extends State<MessageForm> {
               keyboardType: TextInputType.multiline,
               maxLines: 1,
               controller: tagsController,
-              textCapitalization: TextCapitalization.sentences,
+              textCapitalization: TextCapitalization.none,
               decoration: InputDecoration(
                 labelText: "Tags (e.g. 'tag1 tag2 tag3')",
                 fillColor: Colors.white,
@@ -81,7 +81,7 @@ class _MessageFormState extends State<MessageForm> {
                     'content': contentController.text,
                     'postedBy': 'anonim',
                     'postedTime': Timestamp.now(),
-                    'tags': tagsController.text.split(" ")
+                    'tags': tagsController.text.split(" ").map((f) => f.replaceAll("#", "")).toList()
                   });
                   contentController.clear();
                   tagsController.clear();

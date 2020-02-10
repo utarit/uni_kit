@@ -19,7 +19,7 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
   final descriptionController = TextEditingController();
   List<TodoTag> selectedTagList;
 
-  String fs(int n) => n < 9 ? "0$n" : "$n";
+  String fs(int n) => n < 10 ? "0$n" : "$n";
   String formattedDate(DateTime date) =>
       "${days[date.weekday]}, ${fs(date.day)} ${months[date.month]} ${date.year}";
 

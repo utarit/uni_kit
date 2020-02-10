@@ -53,20 +53,14 @@ class TodoListTile extends StatelessWidget {
               },
             ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                child: Text(
-                  todo.description,
-                  style: TextStyle(
-                    fontSize: 16,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
+          Container(
+            child: Text(
+              todo.description,
+              style: TextStyle(
+                fontSize: 16,
+                // fontWeight: FontWeight.bold,
               ),
-            ],
+            ),
           ),
           SizedBox(
             height: 10,
@@ -83,7 +77,7 @@ class TodoListTile extends StatelessWidget {
               ),
               Container(
                 child: Text(
-                  "${t.day} ${months[t.month]} ${t.year} | ${formattedNum(t.hour)}.${formattedNum(t.minute)}",
+                  "${t.day} ${months[t.month]} ${t.year} ${formattedNum(t.hour)}.${formattedNum(t.minute)}",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
