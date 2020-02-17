@@ -71,7 +71,7 @@ class _MessageBoardScreenState extends State<MessageBoardScreen>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Message Board",
+                  "Message Board (beta)",
                   style: TextStyle(
                       fontFamily: "Galano",
                       fontSize: 30,

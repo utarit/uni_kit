@@ -42,7 +42,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
                       "Enter your doldur.xyz username. Your schedule will be parsed and saved here. This action will erase your existing courses."),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextField(
                     onChanged: (str) {
                       setState(() {
