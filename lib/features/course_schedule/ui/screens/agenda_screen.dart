@@ -17,7 +17,10 @@ class _AgendaScreenState extends State<AgendaScreen> {
   _navigateEditScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CourseEditScreen(), settings: RouteSettings(name: 'CourseEditScreen'),),
+      MaterialPageRoute(
+        builder: (context) => CourseEditScreen(),
+        settings: RouteSettings(name: 'CourseEditScreen'),
+      ),
     );
   }
 
@@ -73,9 +76,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
                         await Provider.of<CourseProvider>(context,
                                 listen: false)
                             .fetchCoursesFromDoldurXyz(username);
-                      } catch (e) {
-
-                      }
+                      } catch (e) {}
 
                       setState(() {
                         loading = false;
@@ -137,14 +138,19 @@ class _AgendaScreenState extends State<AgendaScreen> {
             ],
           ),
         ),
-        CourseScheduleWidget(),
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 12.0),
-          child: Text("Course List",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-        ),
         Expanded(
-          child: CourseListWidget(),
+                  child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              CourseScheduleWidget(),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 12.0),
+                child: Text("Course List",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              ),
+              CourseListWidget()
+            ],
+          ),
         )
       ],
     );

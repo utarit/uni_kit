@@ -74,7 +74,7 @@ class _MessageBoardScreenState extends State<MessageBoardScreen>
                   "Message Board (beta)",
                   style: TextStyle(
                       fontFamily: "Galano",
-                      fontSize: 30,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(

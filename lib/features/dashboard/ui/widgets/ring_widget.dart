@@ -17,36 +17,57 @@ class RingWidget extends StatelessWidget {
     } else {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(ringList.length, (index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () async {
-                  const url = 'https://ring.metu.edu.tr';
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                },
-                child: Text(
-                  "Where is Ring",
-                  style: TextStyle(color: Colors.black),
+        children: <Widget>[
+          RaisedButton(
+            onPressed: () async {
+              const url = 'https://ring.metu.edu.tr';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+            child: SizedBox(
+              width: double.infinity,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "Where is Ring?",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    Icon(Icons.open_in_new, size: 18)
+                  ],
                 ),
               ),
-              Text(
-                "${ringList[index].ring.name}:\n${ringList[index].prevTime != null ? formattedNum(ringList[index].prevTime.hour) : ''}:${ringList[index].prevTime != null ? formattedNum(ringList[index].prevTime.minute) : ''} ->  ${formattedNum(ringList[index].time.hour)}:${formattedNum(ringList[index].time.minute)}",
-                style:
-                    TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
-              ),
-              Text(
-                "${ringList[index].ring.stops.join(" -> ")}",
-                style: TextStyle(fontSize: 12, color: Colors.white60),
-              )
-            ],
-          );
-        }),
+            ),
+          ),
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(ringList.length, (index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "${ringList[index].ring.name}:\n${ringList[index].prevTime != null ? formattedNum(ringList[index].prevTime.hour) : ''}:${ringList[index].prevTime != null ? formattedNum(ringList[index].prevTime.minute) : ''} ->  ${formattedNum(ringList[index].time.hour)}:${formattedNum(ringList[index].time.minute)}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700, color: Colors.white),
+                    ),
+                    Text(
+                      "${ringList[index].ring.stops.join(" -> ")}",
+                      style: TextStyle(fontSize: 12, color: Colors.white60),
+                    )
+                  ],
+                );
+              })),
+          Center(
+            child: Icon(
+              Icons.more_horiz,
+              color: Colors.white,
+            ),
+          )
+        ],
       );
     }
   }
