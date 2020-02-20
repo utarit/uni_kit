@@ -31,13 +31,13 @@ class RingWidget extends StatelessWidget {
               width: double.infinity,
               child: Center(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Where is Ring?",
+                      "Where is Ring? ",
                       style: TextStyle(color: Colors.black),
                     ),
-                    Icon(Icons.open_in_new, size: 18)
+                    Icon(Icons.open_in_new, size: 16)
                   ],
                 ),
               ),

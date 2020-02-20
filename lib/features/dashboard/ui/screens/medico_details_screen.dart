@@ -78,16 +78,16 @@ class MedicoDetailsScreen extends StatelessWidget {
       case 8:
         category = categories[3];
         break;
-      case 9:
+      case 10:
         category = categories[4];
         break;
       case 11:
         category = categories[5];
         break;
-      case 12:
+      case 13:
         category = categories[6];
         break;
-      case 14:
+      case 15:
         category = categories[7];
         break;
       case 16:
@@ -95,9 +95,6 @@ class MedicoDetailsScreen extends StatelessWidget {
         break;
       case 17:
         category = categories[9];
-        break;
-      case 18:
-        category = categories[10];
         break;
       default:
         category = "";

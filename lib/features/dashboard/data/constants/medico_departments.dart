@@ -3,7 +3,7 @@ const List<String> categories = [
   "😷 PRATİSYEN HEKİM",
   "👄 DİŞ HEKİMİ",
   "💪 FİZİK TEDAVİ",
-  "👂 KULAK BURUN BOĞAZ",
+  // "👂 KULAK BURUN BOĞAZ",
   "🗿 DERMATOLOJİ",
   "👶 ÇOCUK HASTALIKLARI",
   "👩 KADIN DOĞUM",
