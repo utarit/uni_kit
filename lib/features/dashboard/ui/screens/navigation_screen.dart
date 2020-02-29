@@ -4,7 +4,6 @@ import 'package:uni_kit/core/providers/notification_provider.dart';
 import 'package:uni_kit/features/course_schedule/domain/providers/course_provider.dart';
 import 'package:uni_kit/features/course_schedule/ui/screens/agenda_screen.dart';
 import 'package:uni_kit/features/dashboard/ui/screens/home_screen.dart';
-import 'package:uni_kit/features/message_board/ui/screens/message_board_screen.dart';
 import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
 import 'package:uni_kit/features/todo_list/domain/providers/todo_tag_provider.dart';
 import 'package:uni_kit/features/todo_list/ui/screens/todo_screen.dart';
@@ -21,7 +20,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     AgendaScreen(),
     HomeScreen(),
     TodoScreen(),
-    MessageBoardScreen(),
+    // MessageBoardScreen(),
   ];
 
   @override
@@ -61,8 +60,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
               icon: Icon(Icons.dashboard), title: Text("Dashboard")),
           BottomNavigationBarItem(
               icon: Icon(Icons.assignment_turned_in), title: Text("Todos")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.message), title: Text("Board")),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.message), title: Text("Board")),
         ],
       ),
     );

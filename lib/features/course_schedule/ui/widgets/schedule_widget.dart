@@ -74,7 +74,7 @@ class CourseScheduleWidget extends StatelessWidget {
               color: Color(f.color ?? Colors.transparent),
               // borderRadius: BorderRadius.circular(5),
             ),
-            child: Text(f.acronym,
+            child: Text(f.acronym.length < 8 ? f.acronym: f.acronym.substring(0,7),
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
           ));
         } else {
