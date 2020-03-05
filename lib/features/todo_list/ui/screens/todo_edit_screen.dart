@@ -9,13 +9,16 @@ import 'package:uni_kit/features/todo_list/domain/providers/todo_provider.dart';
 import 'package:uni_kit/features/todo_list/domain/providers/todo_tag_provider.dart';
 
 class TodoEditScreen extends StatefulWidget {
+  final todo;
+  TodoEditScreen({this.todo});
+
   @override
   _TodoEditScreenState createState() => _TodoEditScreenState();
 }
 
 class _TodoEditScreenState extends State<TodoEditScreen> {
   final _formKey = GlobalKey<FormState>();
-  DateTime todo;
+  DateTime deadline;
   final descriptionController = TextEditingController();
   List<TodoTag> selectedTagList;
 
@@ -26,8 +29,13 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
   @override
   void initState() {
     super.initState();
-    todo = DateTime.now();
+    if (widget.todo != null) {
+      selectedTagList = widget.todo.tags;
+      deadline = widget.todo.endTime;
+      descriptionController.text = widget.todo.description;
+    }
     selectedTagList = [];
+    deadline = DateTime.now();
   }
 
   @override
@@ -47,17 +55,17 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
             ),
             onPressed: () {
               if (_formKey.currentState.validate()) {
-                Key key = UniqueKey();
+                Key key = widget.todo == null ? UniqueKey() : widget.todo.key;
                 selectedTagList.sort((a, b) => a.label.compareTo(b.label));
                 Todo result = Todo(
                   tags: selectedTagList,
                   description: descriptionController.text,
-                  endTime: todo,
+                  endTime: deadline,
                   key: key.hashCode,
                 );
                 todoProvider.editTodo(key.hashCode, result);
-                if (DateTime.now()
-                    .isBefore(result.endTime.subtract(NotificationProvider.defaultDuration))) {
+                if (DateTime.now().isBefore(result.endTime
+                    .subtract(NotificationProvider.defaultDuration))) {
                   Provider.of<NotificationProvider>(context, listen: false)
                       .scheduleTodoNotification(result);
                 }
@@ -142,9 +150,9 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
                                       DateTime.now().year + 1, 12, 31, 23, 59),
                                   onConfirm: (date) {
                                 setState(() {
-                                  todo = date;
+                                  deadline = date;
                                 });
-                              }, currentTime: DateTime.now());
+                              }, currentTime: deadline);
                             }),
                       ),
                       Padding(
@@ -167,7 +175,7 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
                               width: 10,
                             ),
                             Text(
-                              todo == null ? "" : formattedDate(todo),
+                              deadline == null ? "" : formattedDate(deadline),
                               style: TextStyle(fontSize: 18),
                             )
                           ],
@@ -193,9 +201,9 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
                               width: 10,
                             ),
                             Text(
-                              todo == null
+                              deadline == null
                                   ? ""
-                                  : "${fs(todo.hour)}:${fs(todo.minute)}",
+                                  : "${fs(deadline.hour)}:${fs(deadline.minute)}",
                               style: TextStyle(fontSize: 18),
                             )
                           ],

@@ -19,7 +19,6 @@ class _TodoScreenState extends State<TodoScreen> {
   int _selectedColor = 0;
   String errorMessage = "";
 
-
   final Map<String, Color> colorList = {
     "lastDay": Colors.red,
     "lastWeek": Colors.orange,
@@ -199,11 +198,15 @@ class _TodoScreenState extends State<TodoScreen> {
               onPressed: () async {
                 await Provider.of<TodoTagProvider>(context, listen: false)
                     .deleteTodoTag(tag.label);
-                Provider.of<TodoProvider>(context, listen: false).todos.forEach((todo) {
+                Provider.of<TodoProvider>(context, listen: false)
+                    .todos
+                    .forEach((todo) {
                   todo.tags.remove(tag);
                 });
                 Provider.of<TodoProvider>(context, listen: false)
-                    .editTodoMultiple(Provider.of<TodoProvider>(context, listen: false).todos);
+                    .editTodoMultiple(
+                        Provider.of<TodoProvider>(context, listen: false)
+                            .todos);
                 setState(() {
                   todoFilter = TodoTag("ALL", Colors.white.value);
                 });
@@ -241,7 +244,7 @@ class _TodoScreenState extends State<TodoScreen> {
           }
         },
         child: InkWell(
-                  child: Stack(
+          child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
               Container(
@@ -252,7 +255,9 @@ class _TodoScreenState extends State<TodoScreen> {
                 decoration: BoxDecoration(
                   color: Color(0xff3A3B40),
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: [BoxShadow(offset: Offset.fromDirection(3.14 / 2))],
+                  boxShadow: [
+                    BoxShadow(offset: Offset.fromDirection(3.14 / 2))
+                  ],
                   // border: Border.all(width: todoFilter == filter ? 1 : 0),
                 ),
                 alignment: Alignment.center,
@@ -393,7 +398,10 @@ class _TodoScreenState extends State<TodoScreen> {
   _navigateTodoEditScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TodoEditScreen(),settings: RouteSettings(name: 'TodoEditScreen'),),
+      MaterialPageRoute(
+        builder: (context) => TodoEditScreen(),
+        settings: RouteSettings(name: 'TodoEditScreen'),
+      ),
     );
   }
 }
