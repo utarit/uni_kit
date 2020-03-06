@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:uni_kit/features/course_schedule/data/models/course.dart';
 import 'package:uni_kit/features/course_schedule/domain/providers/resources/doldur_xyz_integration.dart';

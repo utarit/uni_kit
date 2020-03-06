@@ -82,16 +82,16 @@ class TodoListTile extends StatelessWidget {
                 Text(
                   _differenceDuration(t),
                   style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13,
-                  ),
+                      color: Colors.grey,
+                      fontSize: 13,
+                      fontStyle: FontStyle.italic),
                 ),
                 Container(
                   child: Text(
                     "${t.day} ${months[t.month]} ${t.year} ${formattedNum(t.hour)}.${formattedNum(t.minute)}",
                     style: TextStyle(
                       color: Colors.grey,
-                      fontSize: 14,
+                      fontSize: 13,
                     ),
                   ),
                 ),
@@ -115,7 +115,7 @@ class TodoListTile extends StatelessWidget {
     } else if (duration > Duration(hours: 1)) {
       return "${duration.inHours} hours left";
     } else {
-      return "It's almost come!";
+      return "It's within an hour!";
     }
   }
 }

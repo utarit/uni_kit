@@ -18,9 +18,11 @@ class TodoEditScreen extends StatefulWidget {
 
 class _TodoEditScreenState extends State<TodoEditScreen> {
   final _formKey = GlobalKey<FormState>();
-  DateTime deadline;
+  DateTime deadline = DateTime.now();
   final descriptionController = TextEditingController();
-  List<TodoTag> selectedTagList;
+  List<TodoTag> selectedTagList = [];
+  bool halfHourNotification = true;
+  bool oneDayNotification = false;
 
   String fs(int n) => n < 10 ? "0$n" : "$n";
   String formattedDate(DateTime date) =>
@@ -34,8 +36,6 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
       deadline = widget.todo.endTime;
       descriptionController.text = widget.todo.description;
     }
-    selectedTagList = [];
-    deadline = DateTime.now();
   }
 
   @override
@@ -55,19 +55,30 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
             ),
             onPressed: () {
               if (_formKey.currentState.validate()) {
-                Key key = widget.todo == null ? UniqueKey() : widget.todo.key;
+                int key = widget.todo == null
+                    ? UniqueKey().hashCode
+                    : widget.todo.key;
                 selectedTagList.sort((a, b) => a.label.compareTo(b.label));
                 Todo result = Todo(
                   tags: selectedTagList,
                   description: descriptionController.text,
                   endTime: deadline,
-                  key: key.hashCode,
+                  key: key,
                 );
-                todoProvider.editTodo(key.hashCode, result);
-                if (DateTime.now().isBefore(result.endTime
-                    .subtract(NotificationProvider.defaultDuration))) {
+                todoProvider.editTodo(key, result);
+
+                if (halfHourNotification &&
+                    DateTime.now().isBefore(
+                        result.endTime.subtract(Duration(minutes: 30)))) {
                   Provider.of<NotificationProvider>(context, listen: false)
-                      .scheduleTodoNotification(result);
+                      .scheduleTodoNotification(result, true);
+                }
+
+                if (oneDayNotification &&
+                    DateTime.now()
+                        .isBefore(result.endTime.subtract(Duration(days: 1)))) {
+                  Provider.of<NotificationProvider>(context, listen: false)
+                      .scheduleTodoNotification(result, false);
                 }
                 Future.delayed(const Duration(milliseconds: 100), () {
                   Navigator.pop(context);
@@ -145,14 +156,16 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
                             onPressed: () {
                               DatePicker.showDateTimePicker(context,
                                   showTitleActions: true,
-                                  minTime: DateTime.now(),
+                                  currentTime: deadline,
+                                  minTime: DateTime.now()
+                                      .subtract(Duration(minutes: 1)),
                                   maxTime: DateTime.utc(
                                       DateTime.now().year + 1, 12, 31, 23, 59),
                                   onConfirm: (date) {
                                 setState(() {
                                   deadline = date;
                                 });
-                              }, currentTime: deadline);
+                              });
                             }),
                       ),
                       Padding(
@@ -209,6 +222,37 @@ class _TodoEditScreenState extends State<TodoEditScreen> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text("Notifications",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Checkbox(
+                                value: halfHourNotification,
+                                onChanged: (bool checked) {
+                                  setState(() {
+                                    halfHourNotification =
+                                        checked ? true : false;
+                                  });
+                                }),
+                            Text("Get Notification before 30 min")
+                          ]),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Checkbox(
+                                value: oneDayNotification,
+                                onChanged: (bool checked) {
+                                  setState(() {
+                                    oneDayNotification = checked ? true : false;
+                                  });
+                                }),
+                            Text("Get Notification before 24 hours")
+                          ])
                     ],
                   ),
                 ),
